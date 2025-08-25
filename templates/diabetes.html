@@ -1,0 +1,408 @@
+{% extends "base.html" %}
+
+{% block title %}Diabetes Risk Assessment - Hygieia 2.0{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex align-items-center mb-3">
+                <i class="fas fa-tint fa-2x text-info me-3"></i>
+                <div>
+                    <h1 class="h2 mb-1">Diabetes Risk Assessment</h1>
+                    <p class="text-muted mb-0">Comprehensive diabetes screening based on clinical indicators</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Medical Disclaimer -->
+    <div class="alert alert-info" role="alert">
+        <h5 class="alert-heading">
+            <i class="fas fa-info-circle me-2"></i>Screening Information
+        </h5>
+        <p class="mb-0">
+            This diabetes risk assessment evaluates your likelihood of having diabetes based on established risk factors. 
+            This screening tool is educational only and does not replace professional medical diagnosis or blood glucose testing.
+        </p>
+    </div>
+
+    <form method="POST" id="diabetesForm">
+        <div class="row">
+            <!-- Patient Demographics -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-user me-2"></i>Patient Information
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="age" class="form-label">Age *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="age" name="age" 
+                                           min="18" max="120" required>
+                                    <span class="input-group-text">years</span>
+                                </div>
+                                <div class="form-text">Risk increases with age, especially after 45</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="pregnancies" class="form-label">Number of Pregnancies</label>
+                                <input type="number" class="form-control" id="pregnancies" name="pregnancies" 
+                                       min="0" max="20" value="0">
+                                <div class="form-text">History of gestational diabetes increases risk</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="bmi" class="form-label">Body Mass Index (BMI) *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="bmi" name="bmi" 
+                                           min="10" max="70" step="0.1" required>
+                                    <span class="input-group-text">kg/m²</span>
+                                </div>
+                                <div class="form-text">
+                                    <a href="#" onclick="showBMICalculator()" class="text-decoration-none">
+                                        <i class="fas fa-calculator me-1"></i>Calculate BMI
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="diabetes_pedigree" class="form-label">Diabetes Pedigree Function *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="diabetes_pedigree" name="diabetes_pedigree" 
+                                           min="0" max="5" step="0.001" required>
+                                    <span class="input-group-text">score</span>
+                                </div>
+                                <div class="form-text">Family history score (0.1-2.5 typical range)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clinical Measurements -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-stethoscope me-2"></i>Clinical Measurements
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="glucose" class="form-label">Plasma Glucose Concentration *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="glucose" name="glucose" 
+                                           min="50" max="300" required>
+                                    <span class="input-group-text">mg/dL</span>
+                                </div>
+                                <div class="form-text">
+                                    Oral glucose tolerance test (2h)
+                                    <br><small class="text-muted">Normal: &lt;140, Prediabetes: 140-199, Diabetes: ≥200</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="blood_pressure" class="form-label">Diastolic Blood Pressure *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="blood_pressure" name="blood_pressure" 
+                                           min="40" max="130" required>
+                                    <span class="input-group-text">mmHg</span>
+                                </div>
+                                <div class="form-text">
+                                    Diastolic BP (bottom number)
+                                    <br><small class="text-muted">Normal: &lt;80, High: ≥90</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="skin_thickness" class="form-label">Triceps Skin Fold Thickness</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="skin_thickness" name="skin_thickness" 
+                                           min="0" max="100" value="0">
+                                    <span class="input-group-text">mm</span>
+                                </div>
+                                <div class="form-text">Measure of body fat (optional)</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="insulin" class="form-label">Serum Insulin Level</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="insulin" name="insulin" 
+                                           min="0" max="1000" value="0">
+                                    <span class="input-group-text">μU/mL</span>
+                                </div>
+                                <div class="form-text">
+                                    2-hour serum insulin (optional)
+                                    <br><small class="text-muted">Normal: 16-166 μU/mL</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Risk Factor Information -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">
+                            <i class="fas fa-chart-line me-2"></i>Understanding Diabetes Risk Factors
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h6 class="text-success">Modifiable Risk Factors:</h6>
+                                <ul class="small">
+                                    <li>Body weight and BMI</li>
+                                    <li>Physical activity level</li>
+                                    <li>Diet and nutrition</li>
+                                    <li>Blood pressure control</li>
+                                    <li>Cholesterol levels</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="text-warning">Non-modifiable Risk Factors:</h6>
+                                <ul class="small">
+                                    <li>Age (risk increases after 45)</li>
+                                    <li>Family history of diabetes</li>
+                                    <li>Ethnicity (higher risk in certain groups)</li>
+                                    <li>History of gestational diabetes</li>
+                                    <li>PCOS (Polycystic Ovary Syndrome)</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="text-danger">Warning Signs:</h6>
+                                <ul class="small">
+                                    <li>Frequent urination</li>
+                                    <li>Excessive thirst</li>
+                                    <li>Unexplained weight loss</li>
+                                    <li>Increased hunger</li>
+                                    <li>Blurred vision</li>
+                                    <li>Slow-healing wounds</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="row">
+            <div class="col-12 text-center">
+                <button type="submit" class="btn btn-info btn-lg px-5">
+                    <i class="fas fa-chart-line me-2"></i>Assess Diabetes Risk
+                </button>
+                <div class="form-text mt-2">
+                    Analysis considers multiple risk factors for comprehensive assessment
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Prevention Guidelines -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card border-success">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-shield-alt me-2"></i>Diabetes Prevention Guidelines
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Lifestyle Modifications:</h6>
+                            <ul>
+                                <li><strong>Weight Management:</strong> Lose 5-10% of body weight if overweight</li>
+                                <li><strong>Physical Activity:</strong> 150 minutes of moderate exercise weekly</li>
+                                <li><strong>Healthy Diet:</strong> Focus on whole grains, lean proteins, vegetables</li>
+                                <li><strong>Limit Sugar:</strong> Reduce processed foods and sugary drinks</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Regular Monitoring:</h6>
+                            <ul>
+                                <li><strong>Blood Glucose:</strong> Annual screening after age 45</li>
+                                <li><strong>HbA1c Test:</strong> Every 3 years for low-risk individuals</li>
+                                <li><strong>Blood Pressure:</strong> Regular monitoring and control</li>
+                                <li><strong>Cholesterol:</strong> Annual lipid profile assessment</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BMI Calculator Modal -->
+    <div class="modal fade" id="bmiModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">BMI Calculator</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="height" class="form-label">Height</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="height" placeholder="170" step="0.1">
+                                <span class="input-group-text">cm</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="weight" class="form-label">Weight</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="weight" placeholder="70" step="0.1">
+                                <span class="input-group-text">kg</span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <button type="button" class="btn btn-primary w-100" onclick="calculateBMI()">
+                                Calculate BMI
+                            </button>
+                        </div>
+                        <div class="col-12">
+                            <div id="bmiResult" class="alert" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// BMI Calculator functionality
+function showBMICalculator() {
+    const modal = new bootstrap.Modal(document.getElementById('bmiModal'));
+    modal.show();
+}
+
+function calculateBMI() {
+    const height = parseFloat(document.getElementById('height').value);
+    const weight = parseFloat(document.getElementById('weight').value);
+    
+    if (!height || !weight) {
+        alert('Please enter both height and weight.');
+        return;
+    }
+    
+    const heightInMeters = height / 100;
+    const bmi = weight / (heightInMeters * heightInMeters);
+    const resultDiv = document.getElementById('bmiResult');
+    
+    let category, className;
+    if (bmi < 18.5) {
+        category = 'Underweight';
+        className = 'alert-warning';
+    } else if (bmi < 25) {
+        category = 'Normal weight';
+        className = 'alert-success';
+    } else if (bmi < 30) {
+        category = 'Overweight';
+        className = 'alert-warning';
+    } else {
+        category = 'Obese';
+        className = 'alert-danger';
+    }
+    
+    resultDiv.innerHTML = `
+        <strong>Your BMI: ${bmi.toFixed(1)}</strong><br>
+        Category: ${category}<br>
+        <button type="button" class="btn btn-sm btn-outline-primary mt-2" onclick="useBMI(${bmi.toFixed(1)})">
+            Use this BMI in assessment
+        </button>
+    `;
+    resultDiv.className = `alert ${className}`;
+    resultDiv.style.display = 'block';
+}
+
+function useBMI(bmi) {
+    document.getElementById('bmi').value = bmi;
+    bootstrap.Modal.getInstance(document.getElementById('bmiModal')).hide();
+}
+
+// Form validation and guidance
+document.addEventListener('DOMContentLoaded', function() {
+    // Add input validation and guidance
+    const glucoseField = document.getElementById('glucose');
+    const bmiField = document.getElementById('bmi');
+    
+    glucoseField.addEventListener('input', function() {
+        const value = parseInt(this.value);
+        let message = '';
+        let className = '';
+        
+        if (value < 140) {
+            message = 'Normal range';
+            className = 'text-success';
+        } else if (value < 200) {
+            message = 'Prediabetes range';
+            className = 'text-warning';
+        } else {
+            message = 'Diabetes range - immediate medical attention needed';
+            className = 'text-danger';
+        }
+        
+        this.nextElementSibling.nextElementSibling.innerHTML = 
+            this.nextElementSibling.nextElementSibling.innerHTML.split('<br>')[0] + 
+            `<br><small class="${className}"><strong>${message}</strong></small>`;
+    });
+    
+    bmiField.addEventListener('input', function() {
+        const value = parseFloat(this.value);
+        let message = '';
+        let className = '';
+        
+        if (value < 18.5) {
+            message = 'Underweight';
+            className = 'text-info';
+        } else if (value < 25) {
+            message = 'Normal weight';
+            className = 'text-success';
+        } else if (value < 30) {
+            message = 'Overweight - increased diabetes risk';
+            className = 'text-warning';
+        } else {
+            message = 'Obese - high diabetes risk';
+            className = 'text-danger';
+        }
+        
+        const helpText = this.parentElement.nextElementSibling;
+        helpText.innerHTML = `
+            <a href="#" onclick="showBMICalculator()" class="text-decoration-none">
+                <i class="fas fa-calculator me-1"></i>Calculate BMI
+            </a>
+            <br><small class="${className}"><strong>${message}</strong></small>
+        `;
+    });
+});
+
+// Form submission validation
+document.getElementById('diabetesForm').addEventListener('submit', function(e) {
+    const requiredFields = this.querySelectorAll('[required]');
+    let isValid = true;
+    
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            field.classList.add('is-invalid');
+            isValid = false;
+        } else {
+            field.classList.remove('is-invalid');
+        }
+    });
+    
+    if (!isValid) {
+        e.preventDefault();
+        alert('Please fill in all required fields.');
+    }
+});
+</script>
+{% endblock %}

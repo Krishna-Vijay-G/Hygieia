@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block title %}Hygieia 2.0 - Advanced Medical Diagnostics Platform{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Hero Section -->
+    <div class="row align-items-center mb-5">
+        <div class="col-lg-6">
+            <h1 class="display-4 fw-bold text-medical-primary mb-4">
+                Hygieia 2.0
+                <small class="d-block h4 text-muted mt-2">Advanced Multi-Disease Diagnostic Platform</small>
+            </h1>
+            <p class="lead">
+                Experience the future of healthcare screening with our AI-powered diagnostic tools. 
+                Get preliminary assessments for various health conditions through advanced machine learning technology.
+            </p>
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Important:</strong> This platform is designed for educational and preliminary screening purposes only. 
+                All results must be verified by qualified healthcare professionals.
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="text-center">
+                <i class="fas fa-heartbeat text-medical-primary" style="font-size: 8rem; opacity: 0.7;"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Diagnostic Modules -->
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 shadow-sm diagnostic-card">
+                <div class="card-body text-center">
+                    <div class="icon-circle bg-primary-light mb-3">
+                        <i class="fas fa-eye fa-2x text-primary"></i>
+                    </div>
+                    <h5 class="card-title">Dermatological Analysis</h5>
+                    <p class="card-text">
+                        Upload skin lesion images for AI-powered analysis. Our system identifies potential skin conditions 
+                        and provides educational information.
+                    </p>
+                    <ul class="list-unstyled small text-muted mb-3">
+                        <li><i class="fas fa-check text-success me-1"></i> Image-based analysis</li>
+                        <li><i class="fas fa-check text-success me-1"></i> Multiple condition detection</li>
+                        <li><i class="fas fa-check text-success me-1"></i> Visual explanations</li>
+                    </ul>
+                    <a href="{{ url_for('dermatology') }}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-camera me-1"></i> Start Analysis
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 shadow-sm diagnostic-card">
+                <div class="card-body text-center">
+                    <div class="icon-circle bg-danger-light mb-3">
+                        <i class="fas fa-heart fa-2x text-danger"></i>
+                    </div>
+                    <h5 class="card-title">Heart Disease Risk</h5>
+                    <p class="card-text">
+                        Assess your cardiovascular risk using clinical parameters. Input your health metrics 
+                        for personalized risk evaluation.
+                    </p>
+                    <ul class="list-unstyled small text-muted mb-3">
+                        <li><i class="fas fa-check text-success me-1"></i> Comprehensive assessment</li>
+                        <li><i class="fas fa-check text-success me-1"></i> Risk stratification</li>
+                        <li><i class="fas fa-check text-success me-1"></i> Lifestyle recommendations</li>
+                    </ul>
+                    <a href="{{ url_for('heart_disease') }}" class="btn btn-danger btn-sm">
+                        <i class="fas fa-heartbeat me-1"></i> Check Risk
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 shadow-sm diagnostic-card">
+                <div class="card-body text-center">
+                    <div class="icon-circle bg-warning-light mb-3">
+                        <i class="fas fa-ribbon fa-2x text-warning"></i>
+                    </div>
+                    <h5 class="card-title">Breast Cancer Risk</h5>
+                    <p class="card-text">
+                        Evaluate breast health using clinical measurements. Our AI analyzes multiple parameters 
+                        to assess potential concerns.
+                    </p>
+                    <ul class="list-unstyled small text-muted mb-3">
+                        <li><i class="fas fa-check text-success me-1"></i> Multi-parameter analysis</li>
+                        <li><i class="fas fa-check text-success me-1"></i> Early detection support</li>
+                        <li><i class="fas fa-check text-success me-1"></i> Follow-up guidance</li>
+                    </ul>
+                    <a href="{{ url_for('breast_cancer') }}" class="btn btn-warning btn-sm">
+                        <i class="fas fa-search me-1"></i> Assess Risk
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 shadow-sm diagnostic-card">
+                <div class="card-body text-center">
+                    <div class="icon-circle bg-info-light mb-3">
+                        <i class="fas fa-tint fa-2x text-info"></i>
+                    </div>
+                    <h5 class="card-title">Diabetes Risk</h5>
+                    <p class="card-text">
+                        Screen for diabetes risk using key health indicators. Get personalized recommendations 
+                        for prevention and management.
+                    </p>
+                    <ul class="list-unstyled small text-muted mb-3">
+                        <li><i class="fas fa-check text-success me-1"></i> Glucose level analysis</li>
+                        <li><i class="fas fa-check text-success me-1"></i> Risk factor evaluation</li>
+                        <li><i class="fas fa-check text-success me-1"></i> Prevention strategies</li>
+                    </ul>
+                    <a href="{{ url_for('diabetes') }}" class="btn btn-info btn-sm">
+                        <i class="fas fa-chart-line me-1"></i> Screen Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Features Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2 class="text-center mb-4">Advanced Features</h2>
+        </div>
+        <div class="col-md-4 text-center mb-4">
+            <div class="feature-icon bg-primary text-white rounded-circle mx-auto mb-3">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h5>AI-Powered Analysis</h5>
+            <p class="text-muted">
+                Advanced machine learning models trained on clinical data provide accurate preliminary assessments.
+            </p>
+        </div>
+        <div class="col-md-4 text-center mb-4">
+            <div class="feature-icon bg-success text-white rounded-circle mx-auto mb-3">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h5>Patient Education</h5>
+            <p class="text-muted">
+                Comprehensive educational content generated by AI to help you understand health conditions and recommendations.
+            </p>
+        </div>
+        <div class="col-md-4 text-center mb-4">
+            <div class="feature-icon bg-warning text-white rounded-circle mx-auto mb-3">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h5>Medical Grade Security</h5>
+            <p class="text-muted">
+                Your health information is processed securely with appropriate medical disclaimers and privacy protection.
+            </p>
+        </div>
+    </div>
+
+    <!-- Important Notice -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="alert alert-danger" role="alert">
+                <h5 class="alert-heading">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Critical Medical Disclaimer
+                </h5>
+                <p>
+                    <strong>This platform is not a substitute for professional medical advice, diagnosis, or treatment.</strong> 
+                    The AI-powered assessments provided here are for educational and preliminary screening purposes only.
+                </p>
+                <hr>
+                <ul class="mb-0">
+                    <li>Always seek the advice of qualified healthcare providers with any questions about medical conditions</li>
+                    <li>Never disregard professional medical advice or delay seeking treatment because of information from this platform</li>
+                    <li>In case of emergency, contact emergency medical services immediately</li>
+                    <li>This tool is not approved as a medical device and should not be used for clinical decision-making</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Add smooth scroll to diagnostic cards
+document.querySelectorAll('.diagnostic-card').forEach(card => {
+    card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-5px)';
+        this.style.transition = 'transform 0.3s ease';
+    });
+    
+    card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block title %}AI Medical Chatbot - Hygieia 2.0{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-1">
+                        <i class="fas fa-robot text-primary me-2"></i>
+                        AI Medical Assistant
+                    </h1>
+                    <p class="text-muted mb-0">Get personalized health insights and guidance from Dr. Hygieia</p>
+                </div>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newChatModal">
+                    <i class="fas fa-plus me-1"></i>New Consultation
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Medical Disclaimer -->
+    <div class="alert alert-warning mb-4">
+        <h6 class="alert-heading">
+            <i class="fas fa-exclamation-triangle me-1"></i>
+            Important Medical Disclaimer
+        </h6>
+        <p class="mb-0">
+            This AI assistant provides educational information only and should not replace professional medical advice, 
+            diagnosis, or treatment. Always consult with qualified healthcare providers for medical decisions.
+        </p>
+    </div>
+
+    <div class="row">
+        <!-- Conversation List -->
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-history me-1"></i>
+                        Recent Consultations
+                    </h6>
+                </div>
+                <div class="card-body p-0">
+                    {% if conversations %}
+                        <div class="list-group list-group-flush">
+                            {% for conversation in conversations %}
+                                <a href="{{ url_for('chatbot_conversation', conversation_id=conversation.id) }}" 
+                                   class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">{{ conversation.title }}</h6>
+                                        <small>{{ conversation.updated_at.strftime('%m/%d %H:%M') }}</small>
+                                    </div>
+                                    <p class="mb-1 text-muted small">
+                                        {% if conversation.diagnostic_result %}
+                                            <i class="fas fa-chart-line me-1"></i>
+                                            {{ conversation.diagnostic_result.result_type.replace('_', ' ').title() }} Analysis
+                                        {% else %}
+                                            <i class="fas fa-comments me-1"></i>
+                                            General Consultation
+                                        {% endif %}
+                                    </p>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-comments fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No consultations yet</p>
+                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#newChatModal">
+                                Start Your First Consultation
+                            </button>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Getting Started -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-info-circle me-1"></i>
+                        How Dr. Hygieia Can Help You
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex">
+                                <i class="fas fa-microscope text-primary fa-2x me-3"></i>
+                                <div>
+                                    <h6>Diagnostic Analysis</h6>
+                                    <p class="text-muted small mb-0">
+                                        Get detailed explanations of your test results and what they mean for your health.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex">
+                                <i class="fas fa-pills text-success fa-2x me-3"></i>
+                                <div>
+                                    <h6>Treatment Guidance</h6>
+                                    <p class="text-muted small mb-0">
+                                        Receive general treatment recommendations and lifestyle advice.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex">
+                                <i class="fas fa-heart text-danger fa-2x me-3"></i>
+                                <div>
+                                    <h6>Health Education</h6>
+                                    <p class="text-muted small mb-0">
+                                        Learn about medical conditions, symptoms, and prevention strategies.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex">
+                                <i class="fas fa-camera text-info fa-2x me-3"></i>
+                                <div>
+                                    <h6>Image Analysis</h6>
+                                    <p class="text-muted small mb-0">
+                                        Upload medical images for AI-powered analysis and interpretation.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 text-center">
+                        <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#newChatModal">
+                            <i class="fas fa-comments me-2"></i>
+                            Start New Consultation
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- New Chat Modal -->
+<div class="modal fade" id="newChatModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-plus me-1"></i>
+                    New Medical Consultation
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{{ url_for('new_chatbot_conversation') }}" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="chatTitle" class="form-label">Consultation Topic</label>
+                        <input type="text" class="form-control" id="chatTitle" name="title" 
+                               placeholder="e.g., Blood test results, Skin condition, General health questions">
+                    </div>
+                    <div class="alert alert-info">
+                        <small>
+                            <i class="fas fa-lightbulb me-1"></i>
+                            <strong>Tip:</strong> You can also start a consultation directly from any diagnostic result 
+                            by clicking the "Analyze with AI" button.
+                        </small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-comments me-1"></i>
+                        Start Consultation
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

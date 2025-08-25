@@ -1,0 +1,364 @@
+{% extends "base.html" %}
+
+{% block title %}{{ conversation.title }} - AI Medical Chatbot{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-3">
+    <div class="row">
+        <!-- Back to Chatbot -->
+        <div class="col-12 mb-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{{ url_for('chatbot') }}">
+                            <i class="fas fa-robot me-1"></i>AI Assistant
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active">{{ conversation.title }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Chat Interface -->
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow-sm">
+                <!-- Chat Header -->
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-0">
+                                <i class="fas fa-user-md me-2"></i>
+                                Dr. Hygieia - AI Medical Assistant
+                            </h6>
+                            <small class="opacity-75">{{ conversation.title }}</small>
+                        </div>
+                        <div class="d-flex">
+                            {% if conversation.diagnostic_result %}
+                                <span class="badge bg-light text-primary me-2">
+                                    <i class="fas fa-chart-line me-1"></i>
+                                    {{ conversation.diagnostic_result.result_type.replace('_', ' ').title() }}
+                                </span>
+                            {% endif %}
+                            <span class="badge bg-success">
+                                <i class="fas fa-circle me-1" style="font-size: 0.5rem;"></i>
+                                Online
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Messages -->
+                <div class="card-body p-0">
+                    <div id="chatMessages" class="chat-messages" style="height: 500px; overflow-y: auto;">
+                        {% for message in conversation.messages %}
+                            <div class="message {{ 'user-message' if message.role == 'user' else 'ai-message' }}">
+                                <div class="message-content">
+                                    <div class="d-flex align-items-start">
+                                        <div class="message-avatar me-3">
+                                            {% if message.role == 'user' %}
+                                                <i class="fas fa-user"></i>
+                                            {% else %}
+                                                <i class="fas fa-robot"></i>
+                                            {% endif %}
+                                        </div>
+                                        <div class="message-body flex-grow-1">
+                                            <div class="message-text">
+                                                {{ message.content | replace('\n', '<br>')|safe }}
+                                            </div>
+                                            <div class="message-time">
+                                                {{ message.created_at.strftime('%m/%d/%Y %H:%M') }}
+                                                {% if message.message_type == 'image_analysis' %}
+                                                    <span class="badge bg-info ms-1">
+                                                        <i class="fas fa-image me-1"></i>Analysis
+                                                    </span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Chat Input -->
+                <div class="card-footer">
+                    <form id="chatForm" class="d-flex gap-2">
+                        <input type="hidden" id="conversationId" value="{{ conversation.id }}">
+                        <div class="flex-grow-1">
+                            <textarea id="messageInput" class="form-control" rows="2" 
+                                    placeholder="Ask Dr. Hygieia about your health concerns..."
+                                    style="resize: none;"></textarea>
+                        </div>
+                        <div class="d-flex flex-column gap-2">
+                            <button type="submit" id="sendButton" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="tooltip" 
+                                    title="Upload medical image for analysis" disabled>
+                                <i class="fas fa-camera"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Medical Disclaimer -->
+            <div class="alert alert-warning mt-3">
+                <small>
+                    <i class="fas fa-exclamation-triangle me-1"></i>
+                    <strong>Medical Disclaimer:</strong> This AI assistant provides educational information only. 
+                    Always consult with qualified healthcare providers for medical decisions. 
+                    In case of emergency, contact emergency medical services immediately.
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.chat-messages {
+    padding: 1rem;
+    background-color: #f8f9fa;
+}
+
+.message {
+    margin-bottom: 1.5rem;
+}
+
+.user-message .message-content {
+    margin-left: auto;
+    max-width: 70%;
+}
+
+.ai-message .message-content {
+    margin-right: auto;
+    max-width: 85%;
+}
+
+.message-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: white;
+}
+
+.user-message .message-avatar {
+    background-color: #007bff;
+}
+
+.ai-message .message-avatar {
+    background-color: #28a745;
+}
+
+.message-text {
+    background-color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    line-height: 1.5;
+}
+
+.user-message .message-text {
+    background-color: #007bff;
+    color: white;
+}
+
+.message-time {
+    font-size: 0.75rem;
+    color: #6c757d;
+    margin-top: 0.5rem;
+    padding-left: 1rem;
+}
+
+.user-message .message-time {
+    text-align: right;
+    padding-right: 1rem;
+    padding-left: 0;
+}
+
+#messageInput:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.loading-message {
+    opacity: 0.7;
+}
+
+.loading-message .message-text::after {
+    content: "●●●";
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0%, 60%, 100% {
+        color: inherit;
+    }
+    30% {
+        color: transparent;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chatForm = document.getElementById('chatForm');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+    const chatMessages = document.getElementById('chatMessages');
+    const conversationId = document.getElementById('conversationId').value;
+
+    // Auto-scroll to bottom
+    function scrollToBottom() {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Initial scroll
+    scrollToBottom();
+
+    // Handle form submission
+    chatForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const message = messageInput.value.trim();
+        if (!message) return;
+
+        // Disable input
+        messageInput.disabled = true;
+        sendButton.disabled = true;
+        sendButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+        // Add user message to chat
+        addMessageToChat('user', message);
+        messageInput.value = '';
+
+        // Add loading message
+        const loadingId = addLoadingMessage();
+
+        try {
+            const response = await fetch('/chatbot/message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    conversation_id: conversationId,
+                    message: message
+                })
+            });
+
+            const data = await response.json();
+
+            // Remove loading message
+            removeLoadingMessage(loadingId);
+
+            if (data.success) {
+                addMessageToChat('assistant', data.message.content, data.message.message_type);
+            } else {
+                addMessageToChat('assistant', 'I apologize, but I encountered an error. Please try again.', 'error');
+            }
+        } catch (error) {
+            removeLoadingMessage(loadingId);
+            addMessageToChat('assistant', 'I apologize, but I\'m having trouble connecting right now. Please try again.', 'error');
+        }
+
+        // Re-enable input
+        messageInput.disabled = false;
+        sendButton.disabled = false;
+        sendButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
+        messageInput.focus();
+    });
+
+    // Add message to chat display
+    function addMessageToChat(role, content, messageType = 'text') {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${role}-message`;
+        
+        const now = new Date();
+        const timeStr = now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        
+        let badge = '';
+        if (messageType === 'image_analysis') {
+            badge = '<span class="badge bg-info ms-1"><i class="fas fa-image me-1"></i>Analysis</span>';
+        }
+        
+        messageDiv.innerHTML = `
+            <div class="message-content">
+                <div class="d-flex align-items-start">
+                    <div class="message-avatar me-3">
+                        <i class="fas fa-${role === 'user' ? 'user' : 'robot'}"></i>
+                    </div>
+                    <div class="message-body flex-grow-1">
+                        <div class="message-text">
+                            ${content.replace(/\n/g, '<br>')}
+                        </div>
+                        <div class="message-time">
+                            ${timeStr} ${badge}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        chatMessages.appendChild(messageDiv);
+        scrollToBottom();
+    }
+
+    // Add loading message
+    function addLoadingMessage() {
+        const loadingId = 'loading-' + Date.now();
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message ai-message loading-message';
+        messageDiv.id = loadingId;
+        
+        messageDiv.innerHTML = `
+            <div class="message-content">
+                <div class="d-flex align-items-start">
+                    <div class="message-avatar me-3">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-body flex-grow-1">
+                        <div class="message-text">
+                            Dr. Hygieia is thinking...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        chatMessages.appendChild(messageDiv);
+        scrollToBottom();
+        return loadingId;
+    }
+
+    // Remove loading message
+    function removeLoadingMessage(loadingId) {
+        const loadingElement = document.getElementById(loadingId);
+        if (loadingElement) {
+            loadingElement.remove();
+        }
+    }
+
+    // Handle Enter key (Shift+Enter for new line)
+    messageInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            chatForm.dispatchEvent(new Event('submit'));
+        }
+    });
+
+    // Initialize tooltips
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function(tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+
+{% block title %}Dermatological Analysis - Hygieia 2.0{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex align-items-center mb-3">
+                <i class="fas fa-eye fa-2x text-primary me-3"></i>
+                <div>
+                    <h1 class="h2 mb-1">Dermatological Analysis</h1>
+                    <p class="text-muted mb-0">AI-powered skin condition assessment</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Critical Warning -->
+    <div class="alert alert-danger" role="alert">
+        <h5 class="alert-heading">
+            <i class="fas fa-exclamation-triangle me-2"></i>Important Medical Notice
+        </h5>
+        <p class="mb-0">
+            <strong>This analysis is for educational purposes only and does not constitute medical diagnosis.</strong> 
+            Any concerning skin changes should be evaluated immediately by a qualified dermatologist or healthcare provider.
+        </p>
+    </div>
+
+    <div class="row">
+        <!-- Upload Form -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-upload me-2"></i>Image Upload
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                        <div class="mb-4">
+                            <label for="imageInput" class="form-label">
+                                <strong>Select skin lesion image:</strong>
+                            </label>
+                            <input type="file" class="form-control" id="imageInput" name="image" 
+                                   accept="image/*" required onchange="previewImage(this)">
+                            <div class="form-text">
+                                Supported formats: PNG, JPG, JPEG, GIF. Maximum file size: 16MB.
+                            </div>
+                        </div>
+
+                        <!-- Image Preview -->
+                        <div class="mb-4" id="imagePreview" style="display: none;">
+                            <label class="form-label"><strong>Preview:</strong></label>
+                            <div class="border rounded p-2 text-center">
+                                <img id="previewImg" src="#" alt="Preview" class="img-fluid" style="max-height: 300px;">
+                            </div>
+                        </div>
+
+                        <!-- Guidelines -->
+                        <div class="mb-4">
+                            <h6 class="text-primary">Image Guidelines:</h6>
+                            <ul class="small">
+                                <li>Take photos in good lighting conditions</li>
+                                <li>Ensure the lesion is clearly visible and in focus</li>
+                                <li>Include a reference object (coin, ruler) for size if possible</li>
+                                <li>Avoid shadows or reflections on the skin</li>
+                                <li>Capture the entire lesion and surrounding normal skin</li>
+                            </ul>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100" id="analyzeBtn">
+                            <i class="fas fa-microscope me-2"></i>Analyze Image
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Information Panel -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>Analysis Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="text-primary">What this analysis includes:</h6>
+                    <ul class="mb-4">
+                        <li><strong>Image Processing:</strong> Advanced preprocessing and feature extraction</li>
+                        <li><strong>AI Classification:</strong> Machine learning-based condition identification</li>
+                        <li><strong>Risk Assessment:</strong> Preliminary risk level evaluation</li>
+                        <li><strong>Educational Content:</strong> Detailed information about identified conditions</li>
+                        <li><strong>Recommendations:</strong> Next steps and when to seek professional care</li>
+                    </ul>
+
+                    <h6 class="text-warning">Conditions we screen for:</h6>
+                    <div class="row g-2">
+                        <div class="col-sm-6">
+                            <span class="badge bg-secondary">Benign Nevus</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="badge bg-danger">Melanoma</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="badge bg-warning">Basal Cell Carcinoma</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="badge bg-info">Actinic Keratosis</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="badge bg-success">Seborrheic Keratosis</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="badge bg-primary">Dermatofibroma</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 p-3 bg-light rounded">
+                        <h6 class="text-danger">When to see a dermatologist immediately:</h6>
+                        <ul class="small mb-0">
+                            <li>Any changing mole or lesion</li>
+                            <li>Asymmetrical or irregular borders</li>
+                            <li>Multiple colors in one lesion</li>
+                            <li>Diameter larger than 6mm</li>
+                            <li>Bleeding, itching, or pain</li>
+                            <li>New growths appearing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Processing Modal -->
+    <div class="modal fade" id="processingModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center py-5">
+                    <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+                        <span class="visually-hidden">Processing...</span>
+                    </div>
+                    <h5>Processing Your Image</h5>
+                    <p class="text-muted mb-0">Our AI is analyzing your image. This may take a few moments...</p>
+                    <div class="progress mt-3" style="height: 6px;">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                             role="progressbar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function previewImage(input) {
+    const preview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImg');
+    
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            preview.style.display = 'block';
+        };
+        
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+// Handle form submission
+document.getElementById('uploadForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent the default form submission
+
+    const formData = new FormData(this);
+    const processingModal = new bootstrap.Modal(document.getElementById('processingModal'));
+    const analyzeBtn = document.getElementById('analyzeBtn');
+
+    // Disable the analyze button to prevent multiple submissions
+    analyzeBtn.disabled = true;
+    analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+
+    // Show the processing modal
+    processingModal.show();
+
+    // Remove beforeunload handler since processing is complete
+    const beforeUnloadHandler = (e) => {
+        e.preventDefault();
+        e.returnValue = 'Your image analysis is in progress. Are you sure you want to leave?';
+        return e.returnValue;
+    };
+    window.addEventListener('beforeunload', beforeUnloadHandler);
+
+    fetch(this.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Remove beforeunload handler since processing is complete
+        window.removeEventListener('beforeunload', beforeUnloadHandler);
+        
+        // Clear form fields to remove "unsaved changes" state
+        this.reset();
+        document.getElementById('imagePreview').style.display = 'none';
+        document.getElementById('previewImg').src = '#';
+        
+        // Handle success
+        processingModal.hide();
+        
+        // Re-enable button and restore original text
+        analyzeBtn.disabled = false;
+        analyzeBtn.innerHTML = '<i class="fas fa-microscope me-2"></i>Analyze Image';
+        
+        // Redirect to results page
+        window.location.href = `/results/${data.result_id}`;
+    })
+    .catch(error => {
+        // Remove beforeunload handler on error
+        window.removeEventListener('beforeunload', beforeUnloadHandler);
+        
+        // Re-enable button and restore original text
+        analyzeBtn.disabled = false;
+        analyzeBtn.innerHTML = '<i class="fas fa-microscope me-2"></i>Analyze Image';
+        
+        processingModal.hide();
+        alert('An error occurred: ' + error.message);
+    });
+});
+
+// Validate file size and type
+document.getElementById('imageInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        // Check file size (16MB limit)
+        if (file.size > 16 * 1024 * 1024) {
+            alert('File size exceeds 16MB limit. Please choose a smaller image.');
+            e.target.value = '';
+            document.getElementById('imagePreview').style.display = 'none';
+            return;
+        }
+        
+        // Check file type
+        const validTypes = ['image/png', 'image/jpeg', 'image/gif', 'image/jpg'];
+        if (!validTypes.includes(file.type)) {
+            alert('Invalid file type. Please upload PNG, JPG, JPEG, or GIF files only.');
+            e.target.value = '';
+            document.getElementById('imagePreview').style.display = 'none';
+            return;
+        }
+    }
+});
+</script>
+{% endblock %}

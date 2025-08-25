@@ -1,0 +1,346 @@
+{% extends "base.html" %}
+
+{% block title %}Breast Cancer Risk Assessment - Hygieia 2.0{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex align-items-center mb-3">
+                <i class="fas fa-ribbon fa-2x text-warning me-3"></i>
+                <div>
+                    <h1 class="h2 mb-1">Breast Cancer Risk Assessment</h1>
+                    <p class="text-muted mb-0">Analysis based on cytological characteristics</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Critical Medical Warning -->
+    <div class="alert alert-danger" role="alert">
+        <h5 class="alert-heading">
+            <i class="fas fa-exclamation-triangle me-2"></i>Critical Medical Notice
+        </h5>
+        <p>
+            <strong>This assessment is for educational purposes only and requires immediate professional medical validation.</strong> 
+            Any concerns about breast health should be evaluated by an oncologist or qualified healthcare provider without delay.
+        </p>
+        <p class="mb-0">
+            <strong>Emergency:</strong> If you have any symptoms such as lumps, changes in breast appearance, 
+            or unusual discharge, contact your healthcare provider immediately.
+        </p>
+    </div>
+
+    <form method="POST" id="breastCancerForm">
+        <div class="row">
+            <!-- Mean Features -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0">
+                            <i class="fas fa-ruler me-2"></i>Mean Cell Measurements
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted small mb-3">
+                            These measurements are typically obtained from fine needle aspiration (FNA) cytology.
+                        </p>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="radius_mean" class="form-label">Radius Mean *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="radius_mean" name="radius_mean" 
+                                           min="0" max="50" step="0.01" required>
+                                    <span class="input-group-text">units</span>
+                                </div>
+                                <div class="form-text">Mean distance from center to perimeter</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="texture_mean" class="form-label">Texture Mean *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="texture_mean" name="texture_mean" 
+                                           min="0" max="50" step="0.01" required>
+                                    <span class="input-group-text">units</span>
+                                </div>
+                                <div class="form-text">Standard deviation of gray-scale values</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="perimeter_mean" class="form-label">Perimeter Mean *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="perimeter_mean" name="perimeter_mean" 
+                                           min="0" max="300" step="0.01" required>
+                                    <span class="input-group-text">units</span>
+                                </div>
+                                <div class="form-text">Mean perimeter of cell nuclei</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="area_mean" class="form-label">Area Mean *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="area_mean" name="area_mean" 
+                                           min="0" max="3000" step="0.1" required>
+                                    <span class="input-group-text">units²</span>
+                                </div>
+                                <div class="form-text">Mean area of cell nuclei</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="smoothness_mean" class="form-label">Smoothness Mean *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="smoothness_mean" name="smoothness_mean" 
+                                           min="0" max="0.3" step="0.001" required>
+                                    <span class="input-group-text">ratio</span>
+                                </div>
+                                <div class="form-text">Local variation in radius lengths</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shape and Structure Features -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-shapes me-2"></i>Shape & Structure Features
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted small mb-3">
+                            Advanced morphological characteristics of cell nuclei.
+                        </p>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="compactness_mean" class="form-label">Compactness Mean *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="compactness_mean" name="compactness_mean" 
+                                           min="0" max="1" step="0.001" required>
+                                    <span class="input-group-text">ratio</span>
+                                </div>
+                                <div class="form-text">Perimeter² / area - 1.0</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="concavity_mean" class="form-label">Concavity Mean *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="concavity_mean" name="concavity_mean" 
+                                           min="0" max="1" step="0.001" required>
+                                    <span class="input-group-text">ratio</span>
+                                </div>
+                                <div class="form-text">Severity of concave portions of contour</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="concave_points_mean" class="form-label">Concave Points Mean *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="concave_points_mean" name="concave_points_mean" 
+                                           min="0" max="0.5" step="0.001" required>
+                                    <span class="input-group-text">count</span>
+                                </div>
+                                <div class="form-text">Number of concave portions of contour</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="symmetry_mean" class="form-label">Symmetry Mean *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="symmetry_mean" name="symmetry_mean" 
+                                           min="0" max="1" step="0.001" required>
+                                    <span class="input-group-text">ratio</span>
+                                </div>
+                                <div class="form-text">Symmetry of cell nuclei</div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="fractal_dimension_mean" class="form-label">Fractal Dimension Mean *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="fractal_dimension_mean" name="fractal_dimension_mean" 
+                                           min="0" max="0.2" step="0.001" required>
+                                    <span class="input-group-text">ratio</span>
+                                </div>
+                                <div class="form-text">"Coastline approximation" - 1</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Information Panel -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">
+                            <i class="fas fa-microscope me-2"></i>About These Measurements
+                        </h5>
+                        <p class="card-text">
+                            These cytological features are computed from digitized images of fine needle aspirate (FNA) 
+                            of breast masses. They describe characteristics of the cell nuclei present in the image.
+                        </p>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h6 class="text-success">Size Features:</h6>
+                                <ul class="small">
+                                    <li>Radius - size of nuclei</li>
+                                    <li>Perimeter - boundary length</li>
+                                    <li>Area - total nuclear area</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="text-info">Shape Features:</h6>
+                                <ul class="small">
+                                    <li>Compactness - shape regularity</li>
+                                    <li>Concavity - indentation severity</li>
+                                    <li>Symmetry - nuclear symmetry</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="text-warning">Texture Features:</h6>
+                                <ul class="small">
+                                    <li>Texture - surface variation</li>
+                                    <li>Smoothness - radius variation</li>
+                                    <li>Fractal dimension - complexity</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="row">
+            <div class="col-12 text-center">
+                <button type="submit" class="btn btn-warning btn-lg px-5 text-dark">
+                    <i class="fas fa-search me-2"></i>Assess Breast Cancer Risk
+                </button>
+                <div class="form-text mt-2">
+                    Analysis typically takes 2-3 seconds to complete
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Professional Consultation Notice -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="alert alert-primary" role="alert">
+                <h5 class="alert-heading">
+                    <i class="fas fa-user-md me-2"></i>Professional Consultation Required
+                </h5>
+                <p>
+                    These cytological measurements are typically obtained through medical procedures such as 
+                    fine needle aspiration (FNA) performed by qualified healthcare professionals.
+                </p>
+                <hr>
+                <ul class="mb-0">
+                    <li><strong>Pathologist:</strong> For cytological analysis and measurement interpretation</li>
+                    <li><strong>Oncologist:</strong> For comprehensive breast cancer evaluation</li>
+                    <li><strong>Radiologist:</strong> For imaging studies and guided biopsies</li>
+                    <li><strong>Surgeon:</strong> For tissue sampling and treatment planning</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Form validation and user guidance
+document.addEventListener('DOMContentLoaded', function() {
+    // Add input validation for realistic ranges
+    const validationRanges = {
+        'radius_mean': {min: 6, max: 30, typical: '10-20'},
+        'texture_mean': {min: 9, max: 40, typical: '10-25'},
+        'perimeter_mean': {min: 40, max: 200, typical: '65-130'},
+        'area_mean': {min: 140, max: 2500, typical: '350-1200'},
+        'smoothness_mean': {min: 0.05, max: 0.17, typical: '0.08-0.13'},
+        'compactness_mean': {min: 0.02, max: 0.35, typical: '0.05-0.20'},
+        'concavity_mean': {min: 0, max: 0.43, typical: '0.03-0.25'},
+        'concave_points_mean': {min: 0, max: 0.20, typical: '0.01-0.12'},
+        'symmetry_mean': {min: 0.1, max: 0.3, typical: '0.15-0.23'},
+        'fractal_dimension_mean': {min: 0.05, max: 0.10, typical: '0.055-0.080'}
+    };
+    
+    Object.keys(validationRanges).forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        const range = validationRanges[fieldId];
+        
+        if (field) {
+            field.setAttribute('title', `Typical range: ${range.typical}`);
+            field.setAttribute('data-bs-toggle', 'tooltip');
+            
+            // Add input event listener for range validation
+            field.addEventListener('input', function() {
+                const value = parseFloat(this.value);
+                if (value < range.min || value > range.max) {
+                    this.classList.add('border-warning');
+                    this.setAttribute('title', `Value outside typical range (${range.typical}). Please verify.`);
+                } else {
+                    this.classList.remove('border-warning');
+                    this.setAttribute('title', `Typical range: ${range.typical}`);
+                }
+            });
+        }
+    });
+    
+    // Initialize Bootstrap tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+
+// Form submission validation
+document.getElementById('breastCancerForm').addEventListener('submit', function(e) {
+    const requiredFields = this.querySelectorAll('[required]');
+    let isValid = true;
+    
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            field.classList.add('is-invalid');
+            isValid = false;
+        } else {
+            field.classList.remove('is-invalid');
+        }
+    });
+    
+    if (!isValid) {
+        e.preventDefault();
+        alert('Please fill in all required measurements.');
+        return;
+    }
+    
+    // Show confirmation dialog for sensitive medical analysis
+    if (!confirm('This analysis is for educational purposes only and requires professional medical validation. Do you want to continue?')) {
+        e.preventDefault();
+    }
+});
+
+// Add sample data button for testing
+function addSampleData(isBenign = true) {
+    if (isBenign) {
+        // Sample benign case values
+        document.getElementById('radius_mean').value = '12.5';
+        document.getElementById('texture_mean').value = '15.2';
+        document.getElementById('perimeter_mean').value = '78.5';
+        document.getElementById('area_mean').value = '485.2';
+        document.getElementById('smoothness_mean').value = '0.085';
+        document.getElementById('compactness_mean').value = '0.075';
+        document.getElementById('concavity_mean').value = '0.045';
+        document.getElementById('concave_points_mean').value = '0.025';
+        document.getElementById('symmetry_mean').value = '0.175';
+        document.getElementById('fractal_dimension_mean').value = '0.065';
+    } else {
+        // Sample malignant case values
+        document.getElementById('radius_mean').value = '18.5';
+        document.getElementById('texture_mean').value = '22.8';
+        document.getElementById('perimeter_mean').value = '125.3';
+        document.getElementById('area_mean').value = '1125.8';
+        document.getElementById('smoothness_mean').value = '0.125';
+        document.getElementById('compactness_mean').value = '0.185';
+        document.getElementById('concavity_mean').value = '0.145';
+        document.getElementById('concave_points_mean').value = '0.085';
+        document.getElementById('symmetry_mean').value = '0.205';
+        document.getElementById('fractal_dimension_mean').value = '0.075';
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,458 @@
+{% extends "base.html" %}
+
+{% block title %}Diagnostic Results - Hygieia 2.0{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    {% if result.result_type == 'dermatology' %}
+                        <i class="fas fa-eye fa-2x text-primary me-3"></i>
+                        <div>
+                            <h1 class="h2 mb-1">Dermatological Analysis Results</h1>
+                            <p class="text-muted mb-0">AI-powered skin condition assessment</p>
+                        </div>
+                    {% elif result.result_type == 'heart_disease' %}
+                        <i class="fas fa-heart fa-2x text-danger me-3"></i>
+                        <div>
+                            <h1 class="h2 mb-1">Heart Disease Risk Assessment</h1>
+                            <p class="text-muted mb-0">Cardiovascular risk evaluation results</p>
+                        </div>
+                    {% elif result.result_type == 'breast_cancer' %}
+                        <i class="fas fa-ribbon fa-2x text-warning me-3"></i>
+                        <div>
+                            <h1 class="h2 mb-1">Breast Cancer Risk Assessment</h1>
+                            <p class="text-muted mb-0">Cytological analysis results</p>
+                        </div>
+                    {% elif result.result_type == 'diabetes' %}
+                        <i class="fas fa-tint fa-2x text-info me-3"></i>
+                        <div>
+                            <h1 class="h2 mb-1">Diabetes Risk Assessment</h1>
+                            <p class="text-muted mb-0">Diabetes screening results</p>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="text-end">
+                    <small class="text-muted">Analysis completed on</small>
+                    <br>
+                    <strong>{{ result.created_at.strftime('%B %d, %Y at %I:%M %p') }}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Critical Medical Disclaimer -->
+    <div class="alert alert-danger border-danger" role="alert">
+        <h5 class="alert-heading">
+            <i class="fas fa-exclamation-triangle me-2"></i>Critical Medical Disclaimer
+        </h5>
+        <p>
+            <strong>This analysis is for educational purposes only and does not constitute medical diagnosis or treatment advice.</strong>
+        </p>
+        <hr>
+        <p class="mb-0">
+            <i class="fas fa-user-md me-1"></i> Always consult with qualified healthcare professionals for proper medical evaluation, diagnosis, and treatment decisions.
+            <br>
+            <i class="fas fa-phone-alt me-1"></i> In case of emergency or concerning symptoms, contact emergency medical services immediately.
+        </p>
+    </div>
+
+    <div class="row">
+        <!-- Results Panel -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-bar me-2"></i>Analysis Results
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if result.result_type == 'dermatology' %}
+                        <!-- Dermatology Results -->
+                        <div class="row align-items-center mb-4">
+                            <div class="col-md-6">
+                                {% if result.image_path %}
+                                    <div class="text-center">
+                                        <img src="{{ url_for('static', filename='uploads/' + result.input_data.image_filename) }}" 
+                                             alt="Analyzed skin lesion" class="img-fluid rounded border" style="max-height: 300px;">
+                                        <p class="text-muted small mt-2">Uploaded image for analysis</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <h4 class="text-primary">{{ result.prediction.condition }}</h4>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold">Analysis Confidence</label>
+                                    <div class="progress mb-2" style="height: 20px;">
+                                        <div class="progress-bar confidence-bar {% if result.prediction.confidence > 0.8 %}bg-success{% elif result.prediction.confidence > 0.6 %}bg-warning{% else %}bg-danger{% endif %}" 
+                                             role="progressbar" 
+                                             data-confidence="{{ (result.prediction.confidence * 100)|round(1) }}"
+                                             style="width: 0%;">
+                                            {{ (result.prediction.confidence * 100)|round(1) }}%
+                                        </div>
+                                    </div>
+                                </div>
+                                <p><strong>Risk Level:</strong> 
+                                    <span class="badge {% if result.prediction.risk_level == 'High' %}bg-danger{% elif result.prediction.risk_level == 'Moderate' %}bg-warning text-dark{% else %}bg-success{% endif %}">
+                                        {{ result.prediction.risk_level }}
+                                    </span>
+                                </p>
+                                {% if result.prediction.features %}
+                                    <div class="mt-3">
+                                        <h6>Image Analysis Features:</h6>
+                                        <ul class="small">
+                                            <li>Mean Intensity: {{ result.prediction.features.mean_intensity }}</li>
+                                            <li>Standard Deviation: {{ result.prediction.features.std_intensity }}</li>
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    {% elif result.result_type == 'heart_disease' %}
+                        <!-- Heart Disease Results -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <h4 class="{% if result.prediction.prediction == 'High Risk' %}text-danger{% elif result.prediction.prediction == 'Moderate Risk' %}text-warning{% else %}text-success{% endif %}">
+                                    {{ result.prediction.prediction }}
+                                </h4>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold">Analysis Confidence</label>
+                                    <div class="progress mb-2" style="height: 20px;">
+                                        <div class="progress-bar confidence-bar {% if result.prediction.confidence > 0.8 %}bg-success{% elif result.prediction.confidence > 0.6 %}bg-warning{% else %}bg-danger{% endif %}" 
+                                             role="progressbar" 
+                                             data-confidence="{{ (result.prediction.confidence * 100)|round(1) }}"
+                                             style="width: 0%;">
+                                            {{ (result.prediction.confidence * 100)|round(1) }}%
+                                        </div>
+                                    </div>
+                                </div>
+                                <p><strong>Risk Score:</strong> {{ result.prediction.risk_score }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="progress mb-2" style="height: 25px;">
+                                    <div class="progress-bar {% if result.prediction.risk_score > 0.6 %}bg-danger{% elif result.prediction.risk_score > 0.3 %}bg-warning{% else %}bg-success{% endif %}" 
+                                         role="progressbar" style="width: {{ (result.prediction.risk_score * 100)|round(0) }}%">
+                                        {{ (result.prediction.risk_score * 100)|round(0) }}%
+                                    </div>
+                                </div>
+                                <small class="text-muted">Cardiovascular Risk Score</small>
+                            </div>
+                        </div>
+
+                    {% elif result.result_type == 'breast_cancer' %}
+                        <!-- Breast Cancer Results -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <h4 class="{% if result.prediction.prediction == 'Malignant' %}text-danger{% else %}text-success{% endif %}">
+                                    {{ result.prediction.prediction }}
+                                </h4>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold">Analysis Confidence</label>
+                                    <div class="progress mb-2" style="height: 20px;">
+                                        <div class="progress-bar confidence-bar {% if result.prediction.confidence > 0.8 %}bg-success{% elif result.prediction.confidence > 0.6 %}bg-warning{% else %}bg-danger{% endif %}" 
+                                             role="progressbar" 
+                                             data-confidence="{{ (result.prediction.confidence * 100)|round(1) }}"
+                                             style="width: 0%;">
+                                            {{ (result.prediction.confidence * 100)|round(1) }}%
+                                        </div>
+                                    </div>
+                                </div>
+                                <p><strong>Malignancy Score:</strong> {{ result.prediction.malignancy_score }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="progress mb-2" style="height: 25px;">
+                                    <div class="progress-bar {% if result.prediction.prediction == 'Malignant' %}bg-danger{% else %}bg-success{% endif %}" 
+                                         role="progressbar" style="width: {{ (result.prediction.malignancy_score * 100)|round(0) }}%">
+                                        {{ (result.prediction.malignancy_score * 100)|round(0) }}%
+                                    </div>
+                                </div>
+                                <small class="text-muted">Malignancy Risk Score</small>
+                            </div>
+                        </div>
+
+                    {% elif result.result_type == 'diabetes' %}
+                        <!-- Diabetes Results -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <h4 class="{% if result.prediction.prediction == 'High Risk' %}text-danger{% elif result.prediction.prediction == 'Moderate Risk' %}text-warning{% else %}text-success{% endif %}">
+                                    {{ result.prediction.prediction }}
+                                </h4>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold">Analysis Confidence</label>
+                                    <div class="progress mb-2" style="height: 20px;">
+                                        <div class="progress-bar confidence-bar {% if result.prediction.confidence > 0.8 %}bg-success{% elif result.prediction.confidence > 0.6 %}bg-warning{% else %}bg-danger{% endif %}" 
+                                             role="progressbar" 
+                                             data-confidence="{{ (result.prediction.confidence * 100)|round(1) }}"
+                                             style="width: 0%;">
+                                            {{ (result.prediction.confidence * 100)|round(1) }}%
+                                        </div>
+                                    </div>
+                                </div>
+                                <p><strong>Diabetes Score:</strong> {{ result.prediction.diabetes_score }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="progress mb-2" style="height: 25px;">
+                                    <div class="progress-bar {% if result.prediction.diabetes_score > 0.6 %}bg-danger{% elif result.prediction.diabetes_score > 0.3 %}bg-warning{% else %}bg-success{% endif %}" 
+                                         role="progressbar" style="width: {{ (result.prediction.diabetes_score * 100)|round(0) }}%">
+                                        {{ (result.prediction.diabetes_score * 100)|round(0) }}%
+                                    </div>
+                                </div>
+                                <small class="text-muted">Diabetes Risk Score</small>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <!-- Recommendations -->
+                    {% if result.prediction.recommendations %}
+                        <div class="mt-4">
+                            <h6 class="text-primary">Clinical Recommendations:</h6>
+                            <ul class="list-group list-group-flush">
+                                {% for recommendation in result.prediction.recommendations %}
+                                    <li class="list-group-item border-0 px-0">
+                                        <i class="fas fa-check-circle text-success me-2"></i>{{ recommendation }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Educational Content -->
+            {% if result.educational_content %}
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-graduation-cap me-2"></i>Educational Information
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="educational-content">
+                            {{ result.educational_content|replace('\n', '<br>')|safe }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Action Panel -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-clipboard-list me-2"></i>Next Steps
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2 mb-3">
+                        <a href="{{ url_for('analyze_result_with_chatbot', result_id=result.id) }}" class="btn btn-success">
+                            <i class="fas fa-robot me-2"></i>Analyze with AI Assistant
+                        </a>
+                        <a href="{{ url_for('index') }}" class="btn btn-primary">
+                            <i class="fas fa-home me-1"></i>Return to Dashboard
+                        </a>
+                        {% if result.result_type == 'dermatology' %}
+                            <a href="{{ url_for('dermatology') }}" class="btn btn-outline-primary">
+                                <i class="fas fa-camera me-1"></i>Analyze Another Image
+                            </a>
+                        {% elif result.result_type == 'heart_disease' %}
+                            <a href="{{ url_for('heart_disease') }}" class="btn btn-outline-danger">
+                                <i class="fas fa-heartbeat me-1"></i>New Heart Assessment
+                            </a>
+                        {% elif result.result_type == 'breast_cancer' %}
+                            <a href="{{ url_for('breast_cancer') }}" class="btn btn-outline-warning">
+                                <i class="fas fa-ribbon me-1"></i>New Breast Assessment
+                            </a>
+                        {% elif result.result_type == 'diabetes' %}
+                            <a href="{{ url_for('diabetes') }}" class="btn btn-outline-info">
+                                <i class="fas fa-tint me-1"></i>New Diabetes Assessment
+                            </a>
+                        {% endif %}
+                    </div>
+
+                    <hr>
+
+                    <!-- Professional Consultation -->
+                    <div class="alert alert-warning">
+                        <h6 class="alert-heading">
+                            <i class="fas fa-user-md me-2"></i>Professional Consultation
+                        </h6>
+                        <p class="small mb-2">
+                            <strong>Strongly Recommended:</strong> Discuss these results with a qualified healthcare provider.
+                        </p>
+                        <div class="d-grid">
+                            <button class="btn btn-outline-warning btn-sm" onclick="showDoctorFinderModal()">
+                                <i class="fas fa-search me-1"></i>Find Healthcare Providers
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Emergency Information -->
+                    {% if result.result_type == 'breast_cancer' and result.prediction.prediction == 'Malignant' %}
+                        <div class="alert alert-danger">
+                            <h6 class="alert-heading">
+                                <i class="fas fa-exclamation-triangle me-2"></i>Urgent Action Required
+                            </h6>
+                            <p class="small mb-0">
+                                This result requires immediate professional evaluation. Contact an oncologist or your healthcare provider without delay.
+                            </p>
+                        </div>
+                    {% elif (result.result_type == 'heart_disease' and result.prediction.prediction == 'High Risk') or 
+                            (result.result_type == 'diabetes' and result.prediction.prediction == 'High Risk') %}
+                        <div class="alert alert-danger">
+                            <h6 class="alert-heading">
+                                <i class="fas fa-exclamation-triangle me-2"></i>High Risk Detected
+                            </h6>
+                            <p class="small mb-0">
+                                This assessment indicates elevated risk. Schedule an appointment with your healthcare provider promptly.
+                            </p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Analysis Summary -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>Analysis Summary
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm table-borderless">
+                        <tr>
+                            <td><strong>Analysis ID:</strong></td>
+                            <td class="text-end"><small class="text-muted">{{ result.id[:8] }}...</small></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Type:</strong></td>
+                            <td class="text-end">{{ result.result_type.replace('_', ' ').title() }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Date:</strong></td>
+                            <td class="text-end">{{ result.created_at.strftime('%m/%d/%Y') }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Time:</strong></td>
+                            <td class="text-end">{{ result.created_at.strftime('%I:%M %p') }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Doctor Finder Modal -->
+    <div class="modal fade" id="doctorFinderModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Find Healthcare Providers</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Here are some resources to find qualified healthcare providers:</p>
+                    
+                    {% if result.result_type == 'dermatology' %}
+                        <h6>Dermatology Specialists:</h6>
+                        <ul>
+                            <li>American Academy of Dermatology - Find a Dermatologist</li>
+                            <li>Your primary care physician for referrals</li>
+                            <li>Local hospitals with dermatology departments</li>
+                        </ul>
+                    {% elif result.result_type == 'heart_disease' %}
+                        <h6>Cardiology Specialists:</h6>
+                        <ul>
+                            <li>American College of Cardiology - Find a Cardiologist</li>
+                            <li>Your primary care physician for referrals</li>
+                            <li>Local hospitals with cardiology departments</li>
+                        </ul>
+                    {% elif result.result_type == 'breast_cancer' %}
+                        <h6>Oncology Specialists:</h6>
+                        <ul>
+                            <li>American Cancer Society - Find a Provider</li>
+                            <li>National Cancer Institute - Cancer Centers</li>
+                            <li>Your primary care physician for urgent referrals</li>
+                        </ul>
+                    {% elif result.result_type == 'diabetes' %}
+                        <h6>Endocrinology Specialists:</h6>
+                        <ul>
+                            <li>American Diabetes Association - Find Provider</li>
+                            <li>Endocrine Society - Find an Endocrinologist</li>
+                            <li>Your primary care physician for management</li>
+                        </ul>
+                    {% endif %}
+                    
+                    <div class="alert alert-info mt-3">
+                        <small>
+                            <i class="fas fa-info-circle me-1"></i>
+                            Always verify provider credentials and insurance coverage before scheduling appointments.
+                        </small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function showDoctorFinderModal() {
+    const modal = new bootstrap.Modal(document.getElementById('doctorFinderModal'));
+    modal.show();
+}
+
+// Add print functionality
+function printResults() {
+    window.print();
+}
+
+// Add copy link functionality
+function copyResultsLink() {
+    navigator.clipboard.writeText(window.location.href).then(function() {
+        alert('Results link copied to clipboard!');
+    });
+}
+
+// Enhanced styling for print and confidence animations
+document.addEventListener('DOMContentLoaded', function() {
+    // Add print styles
+    const printStyles = `
+        @media print {
+            .btn, .modal, .alert-dismissible .btn-close {
+                display: none !important;
+            }
+            .card {
+                border: 1px solid #dee2e6 !important;
+                box-shadow: none !important;
+            }
+            .alert {
+                border: 1px solid #dee2e6 !important;
+            }
+        }
+    `;
+    
+    const styleSheet = document.createElement('style');
+    styleSheet.textContent = printStyles;
+    document.head.appendChild(styleSheet);
+    
+    // Animate confidence bars
+    setTimeout(() => {
+        const confidenceBars = document.querySelectorAll('.confidence-bar');
+        confidenceBars.forEach(bar => {
+            const confidence = bar.getAttribute('data-confidence');
+            bar.style.transition = 'width 2s ease-in-out';
+            bar.style.width = confidence + '%';
+        });
+    }, 100);
+});
+</script>
+{% endblock %}

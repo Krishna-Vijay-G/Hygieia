@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+
+{% block title %}Heart Disease Risk Assessment - Hygieia 2.0{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex align-items-center mb-3">
+                <i class="fas fa-heart fa-2x text-danger me-3"></i>
+                <div>
+                    <h1 class="h2 mb-1">Heart Disease Risk Assessment</h1>
+                    <p class="text-muted mb-0">Cardiovascular risk evaluation based on clinical parameters</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Medical Disclaimer -->
+    <div class="alert alert-warning" role="alert">
+        <h5 class="alert-heading">
+            <i class="fas fa-exclamation-triangle me-2"></i>Important Notice
+        </h5>
+        <p class="mb-0">
+            This risk assessment is for educational purposes only and does not constitute medical diagnosis. 
+            Consult with a cardiologist or your healthcare provider for professional cardiovascular evaluation.
+        </p>
+    </div>
+
+    <form method="POST" id="heartDiseaseForm">
+        <div class="row">
+            <!-- Patient Information -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-user me-2"></i>Patient Information
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="age" class="form-label">Age *</label>
+                                <input type="number" class="form-control" id="age" name="age" 
+                                       min="18" max="120" required>
+                                <div class="form-text">Age in years</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="sex" class="form-label">Sex *</label>
+                                <select class="form-select" id="sex" name="sex" required>
+                                    <option value="">Select sex</option>
+                                    <option value="1">Male</option>
+                                    <option value="0">Female</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="chest_pain_type" class="form-label">Chest Pain Type *</label>
+                                <select class="form-select" id="chest_pain_type" name="chest_pain_type" required>
+                                    <option value="">Select type</option>
+                                    <option value="0">Typical Angina</option>
+                                    <option value="1">Atypical Angina</option>
+                                    <option value="2">Non-anginal Pain</option>
+                                    <option value="3">Asymptomatic</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="fasting_blood_sugar" class="form-label">Fasting Blood Sugar *</label>
+                                <select class="form-select" id="fasting_blood_sugar" name="fasting_blood_sugar" required>
+                                    <option value="">Select level</option>
+                                    <option value="0">&lt; 120 mg/dl (Normal)</option>
+                                    <option value="1">&gt; 120 mg/dl (High)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="exercise_angina" class="form-label">Exercise Induced Angina *</label>
+                                <select class="form-select" id="exercise_angina" name="exercise_angina" required>
+                                    <option value="">Select option</option>
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clinical Measurements -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-stethoscope me-2"></i>Clinical Measurements
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="resting_bp" class="form-label">Resting Blood Pressure *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="resting_bp" name="resting_bp" 
+                                           min="80" max="250" required>
+                                    <span class="input-group-text">mmHg</span>
+                                </div>
+                                <div class="form-text">Systolic blood pressure at rest</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="cholesterol" class="form-label">Serum Cholesterol *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="cholesterol" name="cholesterol" 
+                                           min="100" max="600" required>
+                                    <span class="input-group-text">mg/dl</span>
+                                </div>
+                                <div class="form-text">Total cholesterol level</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="max_heart_rate" class="form-label">Maximum Heart Rate *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="max_heart_rate" name="max_heart_rate" 
+                                           min="60" max="220" required>
+                                    <span class="input-group-text">bpm</span>
+                                </div>
+                                <div class="form-text">Maximum heart rate achieved</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="oldpeak" class="form-label">ST Depression *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="oldpeak" name="oldpeak" 
+                                           min="0" max="10" step="0.1" required>
+                                    <span class="input-group-text">mm</span>
+                                </div>
+                                <div class="form-text">Exercise-induced ST depression</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Parameters -->
+            <div class="col-12">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-chart-line me-2"></i>Advanced Parameters
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="resting_ecg" class="form-label">Resting ECG Results *</label>
+                                <select class="form-select" id="resting_ecg" name="resting_ecg" required>
+                                    <option value="">Select result</option>
+                                    <option value="0">Normal</option>
+                                    <option value="1">ST-T Wave Abnormality</option>
+                                    <option value="2">Left Ventricular Hypertrophy</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="slope" class="form-label">ST Slope *</label>
+                                <select class="form-select" id="slope" name="slope" required>
+                                    <option value="">Select slope</option>
+                                    <option value="0">Upsloping</option>
+                                    <option value="1">Flat</option>
+                                    <option value="2">Downsloping</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="vessels" class="form-label">Major Vessels *</label>
+                                <select class="form-select" id="vessels" name="vessels" required>
+                                    <option value="">Select count</option>
+                                    <option value="0">0 vessels</option>
+                                    <option value="1">1 vessel</option>
+                                    <option value="2">2 vessels</option>
+                                    <option value="3">3 vessels</option>
+                                </select>
+                                <div class="form-text">Colored by fluoroscopy</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="thalassemia" class="form-label">Thalassemia *</label>
+                                <select class="form-select" id="thalassemia" name="thalassemia" required>
+                                    <option value="">Select type</option>
+                                    <option value="1">Normal</option>
+                                    <option value="2">Fixed Defect</option>
+                                    <option value="3">Reversible Defect</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="row">
+            <div class="col-12 text-center">
+                <button type="submit" class="btn btn-danger btn-lg px-5">
+                    <i class="fas fa-heartbeat me-2"></i>Assess Heart Disease Risk
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Information Panel -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-info-circle me-2"></i>About This Assessment
+                    </h5>
+                    <p class="card-text">
+                        This cardiovascular risk assessment uses clinical parameters to evaluate your potential 
+                        risk for heart disease. The analysis considers multiple factors including demographic 
+                        information, symptoms, and clinical test results.
+                    </p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-success">Risk Factors Evaluated:</h6>
+                            <ul class="small">
+                                <li>Age and gender</li>
+                                <li>Chest pain characteristics</li>
+                                <li>Blood pressure and cholesterol</li>
+                                <li>Heart rate response to exercise</li>
+                                <li>ECG abnormalities</li>
+                                <li>Stress test results</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-warning">When to Seek Immediate Care:</h6>
+                            <ul class="small">
+                                <li>Chest pain or discomfort</li>
+                                <li>Shortness of breath</li>
+                                <li>Dizziness or fainting</li>
+                                <li>Rapid or irregular heartbeat</li>
+                                <li>Swelling in legs or ankles</li>
+                                <li>Unusual fatigue</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Form validation and help tooltips
+document.addEventListener('DOMContentLoaded', function() {
+    // Add tooltips to form fields
+    const tooltips = {
+        'chest_pain_type': 'Typical angina: substernal chest discomfort. Atypical: meets 2 of 3 typical characteristics.',
+        'oldpeak': 'ST depression induced by exercise relative to rest',
+        'slope': 'Slope of the peak exercise ST segment',
+        'vessels': 'Number of major vessels colored by fluoroscopy',
+        'thalassemia': 'Thalassemia type from cardiac stress test'
+    };
+    
+    Object.keys(tooltips).forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.setAttribute('title', tooltips[fieldId]);
+            field.setAttribute('data-bs-toggle', 'tooltip');
+        }
+    });
+    
+    // Initialize Bootstrap tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+
+// Form validation
+document.getElementById('heartDiseaseForm').addEventListener('submit', function(e) {
+    const requiredFields = this.querySelectorAll('[required]');
+    let isValid = true;
+    
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            field.classList.add('is-invalid');
+            isValid = false;
+        } else {
+            field.classList.remove('is-invalid');
+        }
+    });
+    
+    if (!isValid) {
+        e.preventDefault();
+        alert('Please fill in all required fields.');
+    }
+});
+</script>
+{% endblock %}
