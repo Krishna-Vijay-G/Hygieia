@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../frontend/public/Hero.svg" alt="Hygieia Logo" width="200"/>
+  <img src="https://github.com/Krishna-Vijay-G/Hygieia/blob/main/models%20documentation/public/logo.svg" alt="Hygieia Logo" width="200"/>
 </p>
 
 <h1 align="center">Skin Lesion Diagnostic Model</h1>
@@ -775,3 +775,4 @@ Status: PRODUCTION READY ✅
   <em>Hygieia AI Healthcare Platform</em><br/>
   <a href="https://Krishna-Vijay-G.github.io">Krishna Vijay G</a>
 </p>
+
