@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="/Hero.svg" alt="Hygieia Logo" width="200"/>
+  <img src="/logo.svg" alt="Hygieia Logo" width="200"/>
 </div>
 
 <div align="center">
@@ -130,8 +130,9 @@ The Blockchain Dashboard provides real-time visibility into the health and statu
 
 ### Blockchain Explorer View
 
-<!-- BLOCKCHAIN_DASHBOARD_IMAGE_PLACEHOLDER -->
-![Blockchain Dashboard Placeholder](/blockchain-dashboard-placeholder.png)
+<div align="center">
+  <img src="/block.png" alt="Hygieia Logo" width="200"/>
+</div>
 *Figure 1: Administrative view of the blockchain ledger and verification status.*
 
 ### Dashboard Features
@@ -179,3 +180,4 @@ The Blockchain Dashboard provides real-time visibility into the health and statu
   <em>Hygieia AI Healthcare Platform Security Section</em><br/>
   <a href="https://Krishna-Vijay-G.github.io">Krishna Vijay G</a>
 </p>
+
