@@ -98,22 +98,29 @@ The dashboard provides:
 | **Activity Timeline** | Track health monitoring journey |
 
 #### Analysis Quick Cards:
-```
-┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
-│   ❤️ Heart      │  │   💧 Diabetes   │  │   🔬 Skin       │
-│   Risk          │  │   Risk          │  │   Diagnosis     │
-│   Prediction    │  │   Prediction    │  │                 │
-└─────────────────┘  └─────────────────┘  └─────────────────┘
-        │                    │                    │
-┌───────┴────────────────────┴────────────────────┴───────┐
-│                                                          │
-│   ┌─────────────────┐        ┌─────────────────┐        │
-│   │   🎀 Breast     │        │   🎀 Breast     │        │
-│   │   Cancer Risk   │        │   Tissue        │        │
-│   │   Prediction    │        │   Diagnosis     │        │
-│   └─────────────────┘        └─────────────────┘        │
-│                                                          │
-└──────────────────────────────────────────────────────────┘
+
+```mermaid
+flowchart TB
+    subgraph row1[" "]
+        direction LR
+        A["❤️ Heart<br/>Risk<br/>Prediction"]
+        B["💧 Diabetes<br/>Risk<br/>Prediction"]
+        C["🔬 Skin<br/>Diagnosis"]
+    end
+    
+    subgraph row2[" "]
+        direction LR
+        D["🎀 Breast<br/>Cancer Risk<br/>Prediction"]
+        E["🎀 Breast<br/>Tissue<br/>Diagnosis"]
+    end
+    
+    row1 --> row2
+    
+    style A fill:#fee2e2,stroke:#dc2626,color:#000
+    style B fill:#ffedd5,stroke:#ea580c,color:#000
+    style C fill:#ccfbf1,stroke:#0d9488,color:#000
+    style D fill:#fce7f3,stroke:#db2777,color:#000
+    style E fill:#f5d0fe,stroke:#a855f7,color:#000
 ```
 
 ---
@@ -151,38 +158,39 @@ The dashboard provides:
 
 After completing an analysis, users receive comprehensive results:
 
-```
-┌────────────────────────────────────────────────────────────┐
-│                     ANALYSIS RESULT                        │
-├────────────────────────────────────────────────────────────┤
-│                                                            │
-│   ┌─────────────────────────────────────────────────────┐  │
-│   │              RISK ASSESSMENT                        │  │
-│   │                                                     │  │
-│   │      ████████████████░░░░░░░░  65%                 │  │
-│   │           MODERATE RISK                            │  │
-│   │                                                     │  │
-│   │   Confidence: 94.2%  │  Model: v2.0               │  │
-│   └─────────────────────────────────────────────────────┘  │
-│                                                            │
-│   ┌─────────────────────────────────────────────────────┐  │
-│   │            🤖 AI SUMMARY                            │  │
-│   │                                                     │  │
-│   │   "Your analysis indicates a moderate risk level.  │  │
-│   │    Based on the parameters provided, there are     │  │
-│   │    some factors that warrant attention..."         │  │
-│   │                                                     │  │
-│   │   [💬 Chat with Dr. Hygieia]                       │  │
-│   └─────────────────────────────────────────────────────┘  │
-│                                                            │
-│   ┌─────────────────────────────────────────────────────┐  │
-│   │            🔗 BLOCKCHAIN VERIFICATION              │  │
-│   │                                                     │  │
-│   │   Hash: 0x7a3f...8c2d  │  Block: #1042            │  │
-│   │   Status: ✅ Verified                              │  │
-│   └─────────────────────────────────────────────────────┘  │
-│                                                            │
-└────────────────────────────────────────────────────────────┘
+```mermaid
+block-beta
+    columns 1
+    
+    block:header:1
+        title["📊 ANALYSIS RESULT"]
+    end
+    
+    block:risk:1
+        columns 1
+        r1["RISK ASSESSMENT"]
+        r2["████████████████░░░░░░░░ 65%"]
+        r3["⚠️ MODERATE RISK"]
+        r4["Confidence: 94.2% | Model: v2.0"]
+    end
+    
+    block:ai:1
+        columns 1
+        a1["🤖 AI SUMMARY"]
+        a2["Your analysis indicates a moderate risk level.<br/>Based on the parameters provided, there are<br/>some factors that warrant attention..."]
+        a3["💬 Chat with Dr. Hygieia"]
+    end
+    
+    block:blockchain:1
+        columns 1
+        b1["🔗 BLOCKCHAIN VERIFICATION"]
+        b2["Hash: 0x7a3f...8c2d | Block: #1042"]
+        b3["✅ Verified"]
+    end
+    
+    style title fill:#3b82f6,color:#fff
+    style r3 fill:#fbbf24,color:#000
+    style b3 fill:#22c55e,color:#fff
 ```
 
 #### Result Components:
@@ -215,34 +223,22 @@ After completing an analysis, users receive comprehensive results:
 | **Analysis Integration** | Direct chat about specific results |
 
 #### Conversation Flow:
-```
-┌──────────────────────────────────────────────────────────────┐
-│  🤖 Dr. Hygieia                                              │
-│                                                              │
-│  "Hello! I'm Dr. Hygieia, your AI health assistant.         │
-│   I've reviewed your recent Heart Risk analysis from        │
-│   January 10, 2026.                                         │
-│                                                              │
-│   Your analysis showed a MODERATE risk level with           │
-│   94.2% confidence. Based on the parameters you             │
-│   provided, here's what this means..."                      │
-├──────────────────────────────────────────────────────────────┤
-│  👤 User                                                     │
-│                                                              │
-│  "What lifestyle changes could help reduce my risk?"        │
-├──────────────────────────────────────────────────────────────┤
-│  🤖 Dr. Hygieia                                              │
-│                                                              │
-│  "Great question! Based on your specific parameters,        │
-│   here are some evidence-based recommendations:             │
-│                                                              │
-│   1. 🏃 Regular physical activity...                        │
-│   2. 🥗 Heart-healthy diet...                               │
-│   3. 😴 Quality sleep...                                    │
-│                                                              │
-│   Remember, please consult with your healthcare             │
-│   provider for personalized medical advice."                │
-└──────────────────────────────────────────────────────────────┘
+
+```mermaid
+sequenceDiagram
+    participant U as 👤 User
+    participant D as 🤖 Dr. Hygieia
+    
+    D->>U: Hello! I'm Dr. Hygieia, your AI health assistant.<br/>I've reviewed your recent Heart Risk analysis<br/>from January 10, 2026.
+    D->>U: Your analysis showed a MODERATE risk level<br/>with 94.2% confidence. Based on the parameters<br/>you provided, here's what this means...
+    
+    U->>D: What lifestyle changes could help reduce my risk?
+    
+    D->>U: Great question! Based on your specific parameters,<br/>here are evidence-based recommendations:
+    
+    Note right of D: 🏃 Regular physical activity<br/>🥗 Heart-healthy diet<br/>😴 Quality sleep
+    
+    D->>U: Remember, please consult with your healthcare<br/>provider for personalized medical advice.
 ```
 
 ---
@@ -264,24 +260,49 @@ After completing an analysis, users receive comprehensive results:
 - 📊 **Admin Dashboard** - Complete oversight tools
 
 #### Block Structure:
-```
-┌─────────────────────────────────────────────────────────────┐
-│  BLOCK #1042                                                │
-├─────────────────────────────────────────────────────────────┤
-│  Previous Hash: 0x8f2c3a1b...                               │
-│  Current Hash:  0x7a3f8c2d...                               │
-│  Timestamp:     2026-01-10T14:32:15Z                        │
-│  Nonce:         48721                                       │
-├─────────────────────────────────────────────────────────────┤
-│  PAYLOAD                                                    │
-│  ├── Analysis ID:   uuid-1234...                            │
-│  ├── Type:          heart-prediction                        │
-│  ├── User ID:       uuid-5678...                            │
-│  ├── Result Hash:   0x4f2a...                               │
-│  └── Model Version: 2.0.1                                   │
-├─────────────────────────────────────────────────────────────┤
-│  ✅ VERIFIED                                                │
-└─────────────────────────────────────────────────────────────┘
+
+```mermaid
+block-beta
+    columns 1
+    
+    block:header
+        h1["🔗 BLOCK #1042"]
+    end
+    
+    block:hashes
+        columns 2
+        h2["Previous Hash"]
+        h3["0x8f2c3a1b..."]
+        h4["Current Hash"]
+        h5["0x7a3f8c2d..."]
+        h6["Timestamp"]
+        h7["2026-01-10T14:32:15Z"]
+        h8["Nonce"]
+        h9["48721"]
+    end
+    
+    block:payload
+        columns 2
+        p1["📦 PAYLOAD"]:2
+        p2["Analysis ID"]
+        p3["uuid-1234..."]
+        p4["Type"]
+        p5["heart-prediction"]
+        p6["User ID"]
+        p7["uuid-5678..."]
+        p8["Result Hash"]
+        p9["0x4f2a..."]
+        p10["Model Version"]
+        p11["2.0.1"]
+    end
+    
+    block:status
+        s1["✅ VERIFIED"]
+    end
+    
+    style h1 fill:#8b5cf6,color:#fff
+    style p1 fill:#3b82f6,color:#fff
+    style s1 fill:#22c55e,color:#fff
 ```
 
 ---
@@ -300,53 +321,61 @@ After completing an analysis, users receive comprehensive results:
 
 ### System Overview
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                           FRONTEND                                  │
-│                         (Next.js 14)                                │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌────────────┐  │
-│  │   Pages     │  │ Components  │  │   State     │  │   API      │  │
-│  │   Router    │  │   Library   │  │   (Zustand) │  │   Client   │  │
-│  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘  └─────┬──────┘  │
-└─────────┼────────────────┼────────────────┼────────────────┼────────┘
-          │                │                │                │
-          └────────────────┴────────────────┴────────────────┘
-                                    │
-                                    │ REST API / JWT
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                           BACKEND                                   │
-│                          (Flask)                                    │
-│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐     │
-│  │   Auth Routes   │  │ Analysis Routes │  │   Chat Routes   │     │
-│  └────────┬────────┘  └────────┬────────┘  └────────┬────────┘     │
-│           │                    │                    │               │
-│  ┌────────▼────────────────────▼────────────────────▼────────────┐ │
-│  │                       Services Layer                          │ │
-│  │  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌──────────┐│ │
-│  │  │ Auth       │  │ Analysis   │  │ Blockchain │  │ Chat     ││ │
-│  │  │ Service    │  │ Service    │  │ Service    │  │ Service  ││ │
-│  │  └────────────┘  └────────────┘  └────────────┘  └──────────┘│ │
-│  └───────────────────────────────────────────────────────────────┘ │
-│           │                    │                                    │
-│  ┌────────▼────────────────────▼────────────────────────────────┐  │
-│  │                    ML Model Layer                            │  │
-│  │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐         │  │
-│  │  │ Heart   │  │Diabetes │  │  Skin   │  │ Breast  │         │  │
-│  │  │ Model   │  │ Model   │  │  Model  │  │ Models  │         │  │
-│  │  └─────────┘  └─────────┘  └─────────┘  └─────────┘         │  │
-│  └─────────────────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                         DATABASE                                    │
-│                       (PostgreSQL)                                  │
-│  ┌─────────┐  ┌─────────┐  ┌───────────┐  ┌────────────┐           │
-│  │ Users   │  │Analyses │  │ Blockchain│  │   Chat     │           │
-│  │         │  │         │  │  Records  │  │  Sessions  │           │
-│  └─────────┘  └─────────┘  └───────────┘  └────────────┘           │
-└─────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph Frontend["🖥️ FRONTEND - Next.js 14"]
+        direction LR
+        F1["📄 Pages<br/>Router"]
+        F2["🧩 Components<br/>Library"]
+        F3["📦 State<br/>Zustand"]
+        F4["🔌 API<br/>Client"]
+    end
+    
+    Frontend -->|"REST API / JWT"| Backend
+    
+    subgraph Backend["⚙️ BACKEND - Flask"]
+        direction TB
+        
+        subgraph Routes["Routes"]
+            direction LR
+            R1["🔐 Auth<br/>Routes"]
+            R2["📊 Analysis<br/>Routes"]
+            R3["💬 Chat<br/>Routes"]
+        end
+        
+        subgraph Services["Services Layer"]
+            direction LR
+            S1["Auth<br/>Service"]
+            S2["Analysis<br/>Service"]
+            S3["Blockchain<br/>Service"]
+            S4["Chat<br/>Service"]
+        end
+        
+        subgraph MLModels["🧠 ML Model Layer"]
+            direction LR
+            M1["❤️ Heart<br/>Model"]
+            M2["💧 Diabetes<br/>Model"]
+            M3["🔬 Skin<br/>Model"]
+            M4["🎀 Breast<br/>Models"]
+        end
+        
+        Routes --> Services
+        Services --> MLModels
+    end
+    
+    Backend --> Database
+    
+    subgraph Database["🗄️ DATABASE - PostgreSQL"]
+        direction LR
+        D1[("👤 Users")]
+        D2[("📊 Analyses")]
+        D3[("🔗 Blockchain<br/>Records")]
+        D4[("💬 Chat<br/>Sessions")]
+    end
+    
+    style Frontend fill:#dbeafe,stroke:#3b82f6
+    style Backend fill:#fef3c7,stroke:#f59e0b
+    style Database fill:#dcfce7,stroke:#22c55e
 ```
 
 ### Technology Stack
@@ -389,43 +418,37 @@ After completing an analysis, users receive comprehensive results:
 
 #### 🔬 Skin Lesion Diagnosis Model
 
-```
-┌────────────────────────────────────────────────────────────────┐
-│                    SKIN DIAGNOSIS PIPELINE                     │
-├────────────────────────────────────────────────────────────────┤
-│                                                                │
-│  ┌──────────────┐    ┌────────────────────────────────────┐   │
-│  │   Input      │───▶│  Google Derm Foundation Model      │   │
-│  │   Image      │    │  (Pre-trained on clinical images)  │   │
-│  └──────────────┘    └──────────────┬─────────────────────┘   │
-│                                     │                          │
-│                                     ▼                          │
-│                      ┌──────────────────────────────┐         │
-│                      │  6,144-dim Embeddings        │         │
-│                      │  + 80 Engineered Features    │         │
-│                      └──────────────┬───────────────┘         │
-│                                     │                          │
-│                                     ▼                          │
-│      ┌───────────┬───────────┬───────────┬───────────┐        │
-│      │ XGBoost   │ Random    │ Gradient  │ Extra     │        │
-│      │           │ Forest    │ Boosting  │ Trees     │        │
-│      └─────┬─────┴─────┬─────┴─────┬─────┴─────┬─────┘        │
-│            │           │           │           │               │
-│            └───────────┴─────┬─────┴───────────┘               │
-│                              │                                 │
-│                              ▼                                 │
-│                    ┌──────────────────┐                        │
-│                    │  Voting Ensemble │                        │
-│                    │  + Calibration   │                        │
-│                    └────────┬─────────┘                        │
-│                             │                                  │
-│                             ▼                                  │
-│                    ┌──────────────────┐                        │
-│                    │  7-Class Output  │                        │
-│                    │  Skin Condition  │                        │
-│                    └──────────────────┘                        │
-│                                                                │
-└────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph Pipeline["🔬 SKIN DIAGNOSIS PIPELINE"]
+        direction TB
+        
+        A["📷 Input Image"] --> B["🧠 Google Derm Foundation Model<br/><i>Pre-trained on clinical images</i>"]
+        
+        B --> C["📊 Feature Extraction<br/>6,144-dim Embeddings<br/>+ 80 Engineered Features"]
+        
+        C --> D1["XGBoost"]
+        C --> D2["Random<br/>Forest"]
+        C --> D3["Gradient<br/>Boosting"]
+        C --> D4["Extra<br/>Trees"]
+        
+        D1 --> E["🗳️ Voting Ensemble<br/>+ Calibration"]
+        D2 --> E
+        D3 --> E
+        D4 --> E
+        
+        E --> F["🎯 7-Class Output<br/>Skin Condition"]
+    end
+    
+    style A fill:#e0f2fe,stroke:#0284c7
+    style B fill:#fef3c7,stroke:#f59e0b
+    style C fill:#f3e8ff,stroke:#a855f7
+    style D1 fill:#dcfce7,stroke:#22c55e
+    style D2 fill:#dcfce7,stroke:#22c55e
+    style D3 fill:#dcfce7,stroke:#22c55e
+    style D4 fill:#dcfce7,stroke:#22c55e
+    style E fill:#fce7f3,stroke:#db2777
+    style F fill:#dbeafe,stroke:#3b82f6
 ```
 
 **Detectable Conditions:**
@@ -443,32 +466,46 @@ After completing an analysis, users receive comprehensive results:
 
 ### Multi-Layer Security
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                      SECURITY LAYERS                            │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   Layer 1: Authentication                                       │
-│   ├── JWT Token-based auth                                      │
-│   ├── Bcrypt password hashing                                   │
-│   └── Session management                                        │
-│                                                                 │
-│   Layer 2: Authorization                                        │
-│   ├── Role-based access control                                 │
-│   ├── Admin/User separation                                     │
-│   └── Resource ownership validation                             │
-│                                                                 │
-│   Layer 3: Data Protection                                      │
-│   ├── Input validation & sanitization                           │
-│   ├── SQL injection prevention                                  │
-│   └── XSS protection                                            │
-│                                                                 │
-│   Layer 4: Blockchain Verification                              │
-│   ├── SHA-256 cryptographic hashing                             │
-│   ├── Immutable audit trail                                     │
-│   └── Chain integrity validation                                │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph Security["🔒 SECURITY LAYERS"]
+        direction TB
+        
+        subgraph L1["Layer 1: Authentication"]
+            direction LR
+            A1["🔑 JWT Token-based auth"]
+            A2["🔐 Bcrypt password hashing"]
+            A3["📋 Session management"]
+        end
+        
+        subgraph L2["Layer 2: Authorization"]
+            direction LR
+            B1["👥 Role-based access control"]
+            B2["🛡️ Admin/User separation"]
+            B3["✅ Resource ownership validation"]
+        end
+        
+        subgraph L3["Layer 3: Data Protection"]
+            direction LR
+            C1["🧹 Input validation & sanitization"]
+            C2["💉 SQL injection prevention"]
+            C3["🚫 XSS protection"]
+        end
+        
+        subgraph L4["Layer 4: Blockchain Verification"]
+            direction LR
+            D1["#️⃣ SHA-256 cryptographic hashing"]
+            D2["📜 Immutable audit trail"]
+            D3["🔗 Chain integrity validation"]
+        end
+        
+        L1 --> L2 --> L3 --> L4
+    end
+    
+    style L1 fill:#dbeafe,stroke:#3b82f6
+    style L2 fill:#fef3c7,stroke:#f59e0b
+    style L3 fill:#dcfce7,stroke:#22c55e
+    style L4 fill:#f3e8ff,stroke:#a855f7
 ```
 
 ---
@@ -545,23 +582,34 @@ After completing an analysis, users receive comprehensive results:
 
 ### Color Palette
 
-```
-Primary Colors:
-┌─────────────────────────────────────────────────────────────┐
-│  █████  Primary Blue    │  Medical trust & professionalism │
-│  █████  Success Green   │  Positive results & safety       │
-│  █████  Warning Amber   │  Attention & moderate risk       │
-│  █████  Danger Red      │  High risk & critical alerts     │
-└─────────────────────────────────────────────────────────────┘
-
-Analysis Type Colors:
-┌─────────────────────────────────────────────────────────────┐
-│  █████  Heart Red       │  Cardiovascular analysis         │
-│  █████  Diabetes Orange │  Metabolic health                │
-│  █████  Skin Teal       │  Dermatological care             │
-│  █████  Breast Pink     │  Cancer screening                │
-│  █████  Tissue Fuchsia  │  Tissue diagnosis                │
-└─────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart LR
+    subgraph Primary["Primary Colors"]
+        direction TB
+        P1["🔵 Primary Blue<br/>Medical trust & professionalism"]
+        P2["🟢 Success Green<br/>Positive results & safety"]
+        P3["🟡 Warning Amber<br/>Attention & moderate risk"]
+        P4["🔴 Danger Red<br/>High risk & critical alerts"]
+    end
+    
+    subgraph Analysis["Analysis Type Colors"]
+        direction TB
+        A1["❤️ Heart Red<br/>Cardiovascular analysis"]
+        A2["🧡 Diabetes Orange<br/>Metabolic health"]
+        A3["💚 Skin Teal<br/>Dermatological care"]
+        A4["💗 Breast Pink<br/>Cancer screening"]
+        A5["💜 Tissue Fuchsia<br/>Tissue diagnosis"]
+    end
+    
+    style P1 fill:#3b82f6,color:#fff
+    style P2 fill:#22c55e,color:#fff
+    style P3 fill:#f59e0b,color:#000
+    style P4 fill:#ef4444,color:#fff
+    style A1 fill:#dc2626,color:#fff
+    style A2 fill:#ea580c,color:#fff
+    style A3 fill:#14b8a6,color:#fff
+    style A4 fill:#ec4899,color:#fff
+    style A5 fill:#a855f7,color:#fff
 ```
 
 ---
