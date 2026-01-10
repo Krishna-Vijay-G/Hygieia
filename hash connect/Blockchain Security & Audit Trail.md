@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="/logo.svg" alt="Hygieia Logo" width="200"/>
+  <img src="/public/logo.svg" alt="Hygieia Logo" width="200"/>
 </div>
 
 <div align="center">
@@ -180,4 +180,5 @@ The Blockchain Dashboard provides real-time visibility into the health and statu
   <em>Hygieia AI Healthcare Platform Security Section</em><br/>
   <a href="https://Krishna-Vijay-G.github.io">Krishna Vijay G</a>
 </p>
+
 
