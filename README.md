@@ -2,7 +2,7 @@
 
 ## Authors
 
-<div style="display: inline;"><a href="https://github.com/Krishna-Vijay-G"><img src="https://github.com/Krishna-Vijay-G.png" width="40" height="40" style="border-radius: 50%;"></a></div> | <div style="display: inline;"><a href="https://github.com/Neyanta-Rai"><img src="https://github.com/Neyanta-Rai.png" width="40" height="40" style="border-radius: 50%;"></a></div> | <div style="display: inline;"><a href="https://github.com/Rajesh-2222"><img src="https://github.com/Rajesh-2222.png" width="40" height="40" style="border-radius: 50%;"></a></div> | <div style="display: inline;"><a href="https://github.com/raavi-12"><img src="https://github.com/raavi-12.png" width="40" height="40" style="border-radius: 50%;"></a></div>
+<a href="https://github.com/Krishna-Vijay-G"><img src="https://github.com/Krishna-Vijay-G.png" width="100" height="100" style="border-radius: 50%;" alt="Krishna Vijay G"></a> <a href="https://github.com/Neyanta-Rai"><img src="https://github.com/Neyanta-Rai.png" width="100" height="100" style="border-radius: 50%;" alt="Neyanta Rai"></a> <a href="https://github.com/Rajesh-2222"><img src="https://github.com/Rajesh-2222.png" width="100" height="100" style="border-radius: 50%;" alt="Rajesh M"></a> <a href="https://github.com/raavi-12"><img src="https://github.com/raavi-12.png" width="100" height="100" style="border-radius: 50%;" alt="Raavi Rishika Chowdary"></a>
 
 - Krishna Vijay G: [krishnavijay.gkv@gmail.com](mailto:krishnavijay.gkv@gmail.com)
 - Neyanta Rai: [neyrai2004@gmail.com](mailto:neyrai2004@gmail.com)
