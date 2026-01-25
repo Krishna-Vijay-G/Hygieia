@@ -2,12 +2,7 @@
 
 ## Authors
 
-<div style="display: inline;"><a href="https://github.com/Krishna-Vijay-G"><img src="https://github.com/Krishna-Vijay-G.png" width="40" height="40" style="border-radius: 50%;"></a></div> | <div style="display: inline;"><a href="https://github.com/Neyanta-Rai"><img src="https://github.com/Neyanta-Rai.png" width="40" height="40" style="border-radius: 50%;"></a></div> | <div style="display: inline;"><a href="https://github.com/Rajesh-2222"><img src="https://github.com/Rajesh-2222.png" width="40" height="40" style="border-radius: 50%;"></a></div> | <div style="display: inline;"><a href="https://github.com/raavi-12"><img src="https://github.com/raavi-12.png" width="40" height="40" style="border-radius: 50%;"></a></div>
-
-- Krishna Vijay G: [krishnavijay.gkv@gmail.com](mailto:krishnavijay.gkv@gmail.com)
-- Neyanta Rai: [neyrai2004@gmail.com](mailto:neyrai2004@gmail.com)
-- Rajesh M: [official.rajeshm42@gmail.com](mailto:official.rajeshm42@gmail.com)
-- Raavi Rishika Chowdary: [raavirishuu787@gmail.com](mailto:raavirishuu787@gmail.com)
+<a href="https://github.com/Krishna-Vijay-G"><img src="https://github.com/Krishna-Vijay-G.png" width="40" height="40" style="border-radius: 50%;" alt="Krishna Vijay G"></a> Krishna Vijay G | <a href="https://github.com/Neyanta-Rai"><img src="https://github.com/Neyanta-Rai.png" width="40" height="40" style="border-radius: 50%;" alt="Neyanta Rai"></a> Neyanta Rai | <a href="https://github.com/Rajesh-2222"><img src="https://github.com/Rajesh-2222.png" width="40" height="40" style="border-radius: 50%;" alt="Rajesh M"></a> Rajesh M | <a href="https://github.com/raavi-12"><img src="https://github.com/raavi-12.png" width="40" height="40" style="border-radius: 50%;" alt="Raavi Rishika Chowdary"></a> Raavi Rishika Chowdary
 
 ## Overview
 
