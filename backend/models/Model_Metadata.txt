@@ -1,0 +1,149 @@
+MODEL_INFO = {
+    'name': 'Heart Risk Prediction',
+    'id': 'heart-risk',
+    'model_name': 'Heart Risk Predictive Model',
+    'method': 'AdaBoost_Classifier',
+    'description': 'Heart disease risk prediction using AdaBoost with multiple weak learners',
+    'version': '1.0',
+    'dataset': 'Heart Disease Prediction Dataset - Kaggle',
+    'modified_date': '2026-01-04',
+    'author': 'Krishna Vijay G',
+    'auth_url': 'https://Krishna-Vijay-G.github.io',
+    'training_date': '2025-12-31',
+    'performance': {
+        'test_accuracy': 0.9936,
+        'validation_accuracy': 0.9933,
+        'roc_auc': 0.9997,
+        'f1_score': 0.9936,
+        'precision': 0.9936,
+        'recall': 0.9936
+    },
+    'training_details': {
+        'training_samples': 42000,
+        'validation_samples': 14000,
+        'test_samples': 14000,
+        'total_samples': 70000,
+        'features': 18,
+        'classes': 2
+    }
+}
+
+MODEL_INFO = {
+    'name': 'Diabetes Risk Prediction',
+    'id': 'diabetes-risk',
+    'model_name': 'Diabetes Risk Predictive Model',
+    'method': 'LightGBM_Classifier',
+    'description': 'Early diabetes risk prediction using LightGBM with engineered features',
+    'version': '1.0',
+    'dataset': 'Early Stage Diabetes Risk Prediction - UCI',
+    'modified_date': '2026-01-04',
+    'author': 'Krishna Vijay G',
+    'auth_url': 'https://Krishna-Vijay-G.github.io',
+    'training_date': '2025-12-31',
+    'performance': {
+        'test_accuracy': 0.98,
+        'validation_accuracy': 0.97,
+        'roc_auc': 0.995,
+        'f1_score': 0.98,
+        'precision': 0.98,
+        'recall': 0.98
+    },
+    'training_details': {
+        'training_samples': 400,
+        'validation_samples': 100,
+        'test_samples': 68,
+        'total_samples': 520,
+        'features': 16,
+        'classes': 2
+    }
+}
+
+MODEL_INFO = {
+    'name': 'Skin Lesion Diagnosis',
+    'id': 'skin-diagnosis',
+    'model_name': 'Skin Lesion Diagnostic Model',
+    'method': 'CNN_Voting_Ensemble',
+    'description': 'Multi-class skin disease classification using CNN features with voting ensemble',
+    'version': '1.0',
+    'dataset': 'HAM10000 Dataset - ISIC',
+    'modified_date': '2026-01-05',
+    'author': 'Krishna Vijay G',
+    'auth_url': 'https://Krishna-Vijay-G.github.io',
+    'training_date': '2026-01-04',
+    'performance': {
+        'test_accuracy': 0.9884313969399179,
+        'validation_accuracy': 0.8214939614311764,
+        'roc_auc': 0.993,
+        'f1_score': 0.9883062502087258,
+        'precision': 0.9886283003228951,
+        'recall': 0.9884313969399179
+    },
+    'training_details': {
+        'training_samples': 8039,
+        'validation_samples': 790,
+        'test_samples': 1186,
+        'total_samples': 10015,
+        'features': 6224,
+        'classes': 7
+    }
+}
+
+MODEL_INFO = {
+    'name': 'Breast Cancer Risk Prediction',
+    'id': 'breast-risk',
+    'model_name': 'BC Predictive Model',
+    'method': 'XGB_Ensemble',
+    'description': 'Breast cancer risk prediction using ensemble of 6 XGBoost models with calibration',
+    'version': '1.0',
+    'dataset': 'BCSC Prediction Factors Dataset - BCSC',
+    'modified_date': '2026-01-04',
+    'author': 'Krishna Vijay G',
+    'auth_url': 'https://Krishna-Vijay-G.github.io',
+    'training_date': '2025-12-31',
+    'performance': {
+        'test_accuracy': 0.813,
+        'validation_accuracy': 0.821,
+        'roc_auc': 0.902,
+        'f1_score': 0.813,
+        'precision': 0.821,
+        'recall': 0.821
+    },
+    'training_details': {
+        'training_samples': 30240,
+        'validation_samples': 7560,
+        'test_samples': 7560,
+        'total_samples': 45360,
+        'features': 10,
+        'classes': 2
+    }
+}
+
+MODEL_INFO = {
+    'name': 'Breast Cancer Tissue Diagnosis',
+    'id': 'breast-diagnosis',
+    'model_name': 'BC Diagnostic Model',
+    'method': 'Stacking_Ensemble',
+    'description': 'Breast cancer tissue diagnosis using FNA biopsy data with stacking ensemble of RF, XGB, GB, and SVM models',
+    'version': '1.0',
+    'dataset': 'Wisconsin Diagnosis Dataset - UCI',
+    'modified_date': '2026-01-04',
+    'author': 'Krishna Vijay G',
+    'auth_url': 'https://Krishna-Vijay-G.github.io',
+    'training_date': '2025-12-31',
+    'performance': {
+        'test_accuracy': 0.972,
+        'validation_accuracy': 0.974,
+        'roc_auc': 0.994,
+        'f1_score': 0.972,
+        'precision': 0.976,
+        'recall': 0.976
+    },
+    'training_details': {
+        'training_samples': 455,
+        'validation_samples': 114,
+        'test_samples': 114,
+        'total_samples': 569,
+        'features': 5,
+        'classes': 2
+    }
+}

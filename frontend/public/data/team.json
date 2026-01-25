@@ -1,0 +1,189 @@
+{
+  "team": [
+    {
+      "id": "founder-1",
+      "name": "Mr. Krishna Vijay G",
+      "title": "Founder",
+      "role": "Backend & AI Architect",
+      "description": "Even if I die, you're the one who must survive.",
+      "expertise": ["U22AI024", "AI04", "BIHER"],
+      "image": "/data/images/founder-1.jpg",
+      "linkedin": "https://linkedin.com/in/krishna-vijay",
+      "email": "krishnavijay.gkv@gmail.com"
+    },
+    {
+      "id": "founder-2",
+      "name": "Ms. Neyanta Rai",
+      "title": "Co-Founder",
+      "role": "Design Engineer",
+      "description": "If you don't take risks, you can't create futures.",
+      "expertise": ["U22AI029", "AI04", "BIHER"],
+      "image": "/data/images/founder-2.jpg",
+      "linkedin": "https://linkedin.com/in/neyanta-rai",
+      "email": "neyrai2004@gmail.com"
+    },
+    {
+      "id": "engineer-1",
+      "name": "Mr. Rajesh M",
+      "title": "Model Trainer",
+      "role": "Model Training & Validation",
+      "description": "Set your heart ablaze, go beyond your limits, without fear.",
+      "expertise": ["U22AI036", "AI04", "BIHER"],
+      "image": "/data/images/engineer-1.jpg",
+      "linkedin": "https://www.linkedin.com/in/rajesh-m-384541326/",
+      "email": "official.rajeshm42@gmail.com"
+    },
+    {
+      "id": "engineer-2",
+      "name": "Ms. Raavi Rishika Chowdary",
+      "title": "Product Tester",
+      "role": "QA Testing & Debugging",
+      "description": "I will take a potato chip... and eat it!",
+      "expertise": ["U22AI035", "AI04", "BIHER"],
+      "image": "/data/images/engineer-2.jpg",
+      "linkedin": "https://www.linkedin.com/in/raavi-rishika-chowdary-2702a6378/",
+      "email": "raavirishuu787@gmail.com"
+    }
+  ],
+  "stats": {
+    "modelsDeployed": 5,
+    "totalAccuracy": "95.8%",
+    "patientsHelped": "10,000+",
+    "yearsExperience": "15+"
+  },
+  "mission": "Democratizing access to world-class medical AI diagnostics through cutting-edge machine learning and clinical expertise.",
+  "vision": "A world where advanced medical diagnostics are accessible to everyone, everywhere, powered by trustworthy AI technology."
+  ,
+  "models": [
+    {
+      "id": "heart-prediction",
+      "name": "Heart Risk Prediction",
+      "description": "Heart risk prediction based on symptoms and risk factors",
+      "icon": "Heart",
+      "colorClass": "text-red-600",
+      "darkColorClass": "dark:text-red-400",
+      "bgClass": "bg-red-100 dark:bg-red-900/20",
+      "borderClass": "border-red-200 dark:border-red-800",
+      "activeBorder": "border-red-500",
+      "accuracy": "99.4%",
+      "aucRoc": "99.97%",
+      "dataset": "Heart Disease Risk Dataset",
+      "samples": 70000,
+      "features": 18,
+      "architecture": "AdaBoost Champion Model",
+      "inferenceSpeed": "4.32s",
+      "status": "Production",
+      "href": "/analysis/heart-prediction",
+      "highlights": [
+        "Near-perfect 99.97% ROC-AUC",
+        "Large-scale: 70,000 patient records",
+        "Perfect class balance (50/50)",
+        "9 algorithms tested, AdaBoost selected"
+      ]
+    },
+    {
+      "id": "diabetes-prediction",
+      "name": "Diabetes Risk Prediction",
+      "description": "Diabetes risk prediction based on symptoms and lifestyle",
+      "icon": "Droplets",
+      "colorClass": "text-orange-600",
+      "darkColorClass": "dark:text-orange-400",
+      "bgClass": "bg-orange-100 dark:bg-orange-900/20",
+      "borderClass": "border-orange-200 dark:border-orange-800",
+      "activeBorder": "border-orange-500",
+      "accuracy": "98.1%",
+      "aucRoc": "100%",
+      "dataset": "UCI Early Stage Diabetes",
+      "samples": 520,
+      "features": 16,
+      "architecture": "Optimized LightGBM",
+      "inferenceSpeed": "0.06ms",
+      "status": "Production",
+      "href": "/analysis/diabetes-prediction",
+      "highlights": [
+        "Perfect 1.000 AUC-ROC discrimination",
+        "Symptom-based prediction (no lab tests)",
+        "Ultra-fast inference (0.06ms)",
+        "99.0% mean accuracy across multi-seed validation"
+      ]
+    },
+    {
+      "id": "skin-diagnosis",
+      "name": "Skin Lesion Diagnosis",
+      "description": "AI-powered skin lesion and condition analysis",
+      "icon": "Scan",
+      "colorClass": "text-teal-600",
+      "darkColorClass": "dark:text-teal-400",
+      "bgClass": "bg-teal-100 dark:bg-teal-900/20",
+      "borderClass": "border-teal-200 dark:border-teal-800",
+      "activeBorder": "border-teal-500",
+      "accuracy": "96.8%",
+      "aucRoc": "99.0%",
+      "dataset": "HAM10000",
+      "samples": 8039,
+      "features": 6224,
+      "architecture": "Deep Learning + Ensemble",
+      "inferenceSpeed": "4.95s",
+      "status": "Production",
+      "href": "/analysis/skin-diagnosis",
+      "highlights": [
+        "93.9% mean accuracy across multi-seed validation",
+        "Derm Foundation Model (6144-dim embeddings)",
+        "7 skin condition classes",
+        "Calibrated predictions (temp=1.08, prior=0.15)"
+      ]
+    },
+    {
+      "id": "breast-prediction",
+      "name": "Breast Cancer Prediction",
+      "description": "Clinical risk assessment using biomarkers and risk factors",
+      "icon": "Ribbon",
+      "colorClass": "text-pink-600",
+      "darkColorClass": "dark:text-pink-400",
+      "bgClass": "bg-pink-100 dark:bg-pink-900/20",
+      "borderClass": "border-pink-200 dark:border-pink-800",
+      "activeBorder": "border-pink-500",
+      "accuracy": "81.3%",
+      "aucRoc": "90.24%",
+      "dataset": "BCSC Surveillance Consortium",
+      "samples": 251995,
+      "features": 79,
+      "architecture": "6-Model XGBoost Ensemble",
+      "inferenceSpeed": "<1s batch",
+      "status": "Production",
+      "href": "/analysis/breast-prediction",
+      "highlights": [
+        "82.11% cancer detection rate",
+        "Large-scale: 5.7M patient observations",
+        "79 engineered features from 10 base factors",
+        "Sample weighting for population accuracy"
+      ]
+    },
+    {
+      "id": "breast-diagnosis",
+      "name": "Breast Tissue Diagnosis",
+      "description": "Tissue-level tumor diagnosis using FNA measurements",
+      "icon": "Ribbon",
+      "colorClass": "text-fuchsia-600",
+      "darkColorClass": "dark:text-fuchsia-400",
+      "bgClass": "bg-fuchsia-100 dark:bg-fuchsia-900/20",
+      "borderClass": "border-fuchsia-200 dark:border-fuchsia-800",
+      "activeBorder": "border-fuchsia-500",
+      "accuracy": "97.2%",
+      "aucRoc": "99.4%",
+      "dataset": "Wisconsin Diagnostic Dataset",
+      "samples": 569,
+      "features": 12,
+      "architecture": "Stacking Ensemble (4 Base + Meta-Learner)",
+      "inferenceSpeed": "0.32ms",
+      "status": "Production",
+      "href": "/analysis/breast-diagnosis",
+      "highlights": [
+        "97.6% malignant recall (cancer detection)",
+        "96.9% benign recall",
+        "Advanced feature engineering (5 → 12 features)",
+        "SMOTE balancing for optimal performance"
+      ]
+    }
+  ]
+}
