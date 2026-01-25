@@ -1,5 +1,12 @@
 # Hygieia - AI-Powered Medical Diagnostic Platform
 
+## Authors
+
+- Krishna Vijay G: [krishnavijay.gkv@gmail.com](mailto:krishnavijay.gkv@gmail.com)
+- Neyanta Rai: [neyrai2004@gmail.com](mailto:neyrai2004@gmail.com)
+- Rajesh M: [official.rajeshm42@gmail.com](mailto:official.rajeshm42@gmail.com)
+- Raavi Rishika Chowdary: [raavirishuu787@gmail.com](mailto:raavirishuu787@gmail.com)
+
 ## Overview
 
 Hygieia is a comprehensive AI-powered medical diagnostic platform designed to assist healthcare professionals and patients with early disease detection and risk assessment. The platform integrates multiple machine learning models for diagnosing breast cancer, predicting diabetes risk, assessing heart disease probability, and analyzing skin lesions, along with an AI-powered chat assistant named Dr. Hygieia.
@@ -78,14 +85,38 @@ cp ../.env.example ../.env
 # Edit .env with your actual values
 ```
 
-#### Set Up Database
-```bash
-# If using local SQLite (default):
-# Database will be created automatically
+#### Train Machine Learning Models
+The project includes pre-trained models, but you can also train them from scratch:
 
-# If using PostgreSQL/Supabase:
-# Update DATABASE_URL in .env
+```bash
+# Navigate to backend models directory
+cd backend/models
+
+# Train Heart Disease Model
+cd "Heart Risk Predictive Model"
+python train-heart-prediction.ipynb  # Run the Jupyter notebook
+# or
+python heart_prediction_benchmarker.py
+
+# Train Breast Cancer Diagnostic Model
+cd "../BC Diagnostic Model"
+python train-breast-diagnosis.py
+
+# Train Breast Cancer Predictive Model
+cd "../BC Predictive Model"
+python train-breast-prediction.py
+
+# Train Diabetes Model
+cd "../Diabetes Risk Predictive Model"
+python train-diabetes-prediction.py
+
+# Train Skin Lesion Model
+# Get the Google Derm Founadation Model from the ReadMe File URL
+cd "../Skin Lesion Diagnostic Model"
+python train_skin-diagnosis.py
 ```
+
+**Note**: Training requires the respective datasets to be present in each model directory. The skin lesion model requires the HAM10000 dataset.
 
 #### Run Backend
 ```bash
