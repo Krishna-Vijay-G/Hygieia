@@ -2,10 +2,10 @@
 
 ## Authors
 
-- Krishna Vijay G: [krishnavijay.gkv@gmail.com](mailto:krishnavijay.gkv@gmail.com)
-- Neyanta Rai: [neyrai2004@gmail.com](mailto:neyrai2004@gmail.com)
-- Rajesh M: [official.rajeshm42@gmail.com](mailto:official.rajeshm42@gmail.com)
-- Raavi Rishika Chowdary: [raavirishuu787@gmail.com](mailto:raavirishuu787@gmail.com)
+- [![Krishna Vijay G](https://github.com/Krishna-Vijay-G.png)](https://github.com/Krishna-Vijay-G) Krishna Vijay G
+- [![Neyanta Rai](https://github.com/Neyanta-Rai.png)](https://github.com/Neyanta-Rai) Neyanta Rai
+- [![Rajesh M](https://github.com/Rajesh-2222.png)](https://github.com/Rajesh-2222) Rajesh M
+- [![Raavi Rishika Chowdary](https://github.com/raavi-12.png)](https://github.com/raavi-12) Raavi Rishika Chowdary
 
 ## Overview
 
