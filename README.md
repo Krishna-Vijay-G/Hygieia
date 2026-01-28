@@ -13,6 +13,10 @@
 
 Hygieia is a comprehensive AI-powered medical diagnostic platform designed to assist healthcare professionals and patients with early disease detection and risk assessment. The platform integrates multiple machine learning models for diagnosing breast cancer, predicting diabetes risk, assessing heart disease probability, and analyzing skin lesions, along with an AI-powered chat assistant named Dr. Hygieia.
 
+## Reports of the Project
+
+The details of the project Hygieia and AI Models are stored in this [repository](https://github.com/Krishna-Vijay-G/Hygieia-Report).
+
 ## Features
 
 - **Breast Cancer Diagnosis**: Diagnostic model for breast cancer detection using Wisconsin dataset
