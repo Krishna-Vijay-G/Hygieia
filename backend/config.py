@@ -110,8 +110,8 @@ class Config:
     # =============================================================================
     # AI CHAT CONFIGURATION (Dr. Hygieia)
     # =============================================================================
-    OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')  # Required for AI chat features
-    OPENAI_MODEL = os.getenv('OPENAI_MODEL', 'gpt-4o-mini')  # Default model
+    GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
+    GEMINI_MODEL = os.getenv('GEMINI_MODEL', 'gemini-2.0-flash-exp')
 
 
 # =============================================================================
@@ -127,7 +127,8 @@ def print_config():
     print(f"  Debug Mode:       {Config.DEBUG}")
     print(f"  Database:         {'Configured' if Config.DATABASE_URL else 'SQLite (local)'}")
     print(f"  Upload Path:      {Config.UPLOAD_FOLDER}")
-    print(f"  AI Chat (Dr. Hygieia): {'Enabled' if Config.OPENAI_API_KEY else 'Disabled (set OPENAI_API_KEY)'}")
+    print(f"  AI Chat (Dr. Hygieia): {'Google Gemini' if Config.GOOGLE_API_KEY else 'Disabled (set GOOGLE_API_KEY)'}")
+    print(f"  Model:            {Config.GEMINI_MODEL}")
     print("=" * 70)
     print("\n  Access from this PC:      http://localhost:5000")
     print(f"  Access from network:      http://{Config.LOCAL_IP}:5000")

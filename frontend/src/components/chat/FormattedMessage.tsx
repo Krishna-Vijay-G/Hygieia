@@ -36,8 +36,8 @@ export function FormattedMessage({ content }: FormattedMessageProps) {
         }
         orderedListItems.push(trimmed);
       }
-      // Handle bullet points (- item)
-      else if (trimmed.startsWith('- ')) {
+      // Handle bullet points (- item or * item)
+      else if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
         // Flush ordered list if exists
         if (orderedListItems.length > 0) {
           flushOrderedList();
@@ -110,7 +110,7 @@ export function FormattedMessage({ content }: FormattedMessageProps) {
           <ul key={`unordered-list-${elements.length}`} className="list-disc list-inside mb-3 space-y-1 ml-2">
             {unorderedListItems.map((item, i) => (
               <li key={i} className="text-sm leading-relaxed">
-                {renderInlineFormatting(item.replace(/^-\s*/, ''))}
+                {renderInlineFormatting(item.replace(/^[-*]\s*/, ''))}
               </li>
             ))}
           </ul>
@@ -123,19 +123,52 @@ export function FormattedMessage({ content }: FormattedMessageProps) {
   };
 
   const renderInlineFormatting = (text: string) => {
-    // Handle **bold** text
-    const parts = text.split(/(\*\*[^*]+\*\*)/g);
+    // Handle **bold** and *italic* text
+    // Split on both patterns but keep them in order
+    const parts: React.ReactNode[] = [];
+    let remaining = text;
+    let key = 0;
 
-    return parts.map((part, idx) => {
-      if (part.startsWith('**') && part.endsWith('**')) {
-        return (
-          <strong key={idx} className="font-semibold">
-            {part.slice(2, -2)}
+    while (remaining.length > 0) {
+      // Try to match **bold**
+      const boldMatch = remaining.match(/\*\*([^*]+)\*\*/);
+      // Try to match *italic* (but not **)
+      const italicMatch = remaining.match(/(?<!\*)\*([^*]+)\*(?!\*)/);
+
+      // Determine which match comes first
+      const boldIndex = boldMatch ? remaining.indexOf(boldMatch[0]) : Infinity;
+      const italicIndex = italicMatch ? remaining.indexOf(italicMatch[0]) : Infinity;
+
+      if (boldIndex < italicIndex) {
+        // Process bold first
+        if (boldIndex > 0) {
+          parts.push(remaining.substring(0, boldIndex));
+        }
+        parts.push(
+          <strong key={key++} className="font-semibold">
+            {boldMatch![1]}
           </strong>
         );
+        remaining = remaining.substring(boldIndex + boldMatch![0].length);
+      } else if (italicIndex < Infinity) {
+        // Process italic first
+        if (italicIndex > 0) {
+          parts.push(remaining.substring(0, italicIndex));
+        }
+        parts.push(
+          <em key={key++} className="italic">
+            {italicMatch![1]}
+          </em>
+        );
+        remaining = remaining.substring(italicIndex + italicMatch![0].length);
+      } else {
+        // No more formatting
+        parts.push(remaining);
+        break;
       }
-      return part;
-    });
+    }
+
+    return parts;
   };
 
   return (

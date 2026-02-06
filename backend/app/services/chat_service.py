@@ -2,7 +2,7 @@
 Dr. Hygieia AI Chat Service
 ===========================
 Provides AI-powered chat functionality with context awareness for medical analysis results.
-Uses OpenAI GPT for intelligent responses about health analysis.
+Uses Google Gemini API for intelligent responses about health analysis.
 """
 
 import os
@@ -13,13 +13,15 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Check if OpenAI is available
+# Check if Google Gemini is available
 try:
-    from openai import OpenAI
-    OPENAI_AVAILABLE = True
+    from google import genai
+    from google.genai import types
+    GEMINI_AVAILABLE = True
 except ImportError:
-    OPENAI_AVAILABLE = False
-    OpenAI = None
+    GEMINI_AVAILABLE = False
+    genai = None
+    types = None
 
 # System prompt for Dr. Hygieia
 SYSTEM_PROMPT = """You are Dr. Hygieia, an AI health assistant for the Hygieia Medical Diagnostic Platform. 
@@ -46,6 +48,13 @@ Analysis types you can help with:
 - Diabetes Risk Prediction: Evaluates risk factors for diabetes
 - Skin Condition Diagnosis: Analyzes skin lesion images for potential conditions
 - Breast Cancer Screening: Both predictive risk assessment and diagnostic analysis
+
+Formatting guidelines:
+- Use numbered lists (1. 2. 3.) for sequential steps or ordered information
+- Use dash bullets (- item) for unordered lists, NOT asterisks
+- Use **bold** for emphasis on important terms
+- Keep paragraphs concise and well-spaced
+- Use natural, conversational language
 
 Remember: You are an educational tool, not a replacement for professional medical advice."""
 
@@ -139,16 +148,21 @@ class DrHygieiaChat:
     """Dr. Hygieia AI Chat Service"""
     
     def __init__(self):
-        self.api_key = os.getenv('OPENAI_API_KEY')
-        self.model = os.getenv('OPENAI_MODEL', 'gpt-4o-mini')
+        self.api_key = os.getenv('GOOGLE_API_KEY')
+        self.model_name = os.getenv('GEMINI_MODEL', 'gemini-2.0-flash-exp')
         self.client = None
         
-        if OPENAI_AVAILABLE and self.api_key:
-            self.client = OpenAI(api_key=self.api_key)
-    
+        if GEMINI_AVAILABLE and self.api_key:
+            try:
+                self.client = genai.Client(api_key=self.api_key)
+                print(f"Google Gemini client initialized with model: {self.model_name}")
+            except Exception as e:
+                print(f"Error initializing Gemini client: {e}")
+                self.client = None
+
     @property
     def is_available(self) -> bool:
-        """Check if the AI service is available"""
+        """Check if Gemini AI service is available"""
         return self.client is not None
     
     def generate_analysis_summary(self, analysis: dict, user: dict = None) -> str:
@@ -156,11 +170,10 @@ class DrHygieiaChat:
         if not self.is_available:
             return self._get_fallback_summary(analysis)
         
-        try:
-            analysis_context = get_analysis_context(analysis)
-            user_context = get_user_context(user) if user else ""
-            
-            prompt = f"""Based on the following medical analysis result, provide a brief, friendly summary 
+        analysis_context = get_analysis_context(analysis)
+        user_context = get_user_context(user) if user else ""
+        
+        prompt = f"""Based on the following medical analysis result, provide a brief, friendly summary 
 that explains the results in simple terms. Include:
 1. What the analysis found
 2. What this means for the user
@@ -171,20 +184,23 @@ that explains the results in simple terms. Include:
 
 Please provide a concise summary (2-3 paragraphs) that is informative yet reassuring."""
 
-            response = self.client.chat.completions.create(
-                model=self.model,
-                messages=[
-                    {"role": "system", "content": SYSTEM_PROMPT},
-                    {"role": "user", "content": prompt}
-                ],
-                max_tokens=500,
-                temperature=0.7
+        try:
+            response = self.client.models.generate_content(
+                model=self.model_name,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    system_instruction=SYSTEM_PROMPT,
+                    max_output_tokens=512,
+                    temperature=0.7
+                )
             )
             
-            return response.choices[0].message.content
-            
+            if response.candidates and response.candidates[0].content and response.candidates[0].content.parts:
+                return response.candidates[0].content.parts[0].text
+            else:
+                return self._get_fallback_summary(analysis)
         except Exception as e:
-            print(f"Error generating summary: {e}")
+            print(f"Error in Gemini summary: {e}")
             return self._get_fallback_summary(analysis)
     
     def _get_fallback_summary(self, analysis: dict) -> str:
@@ -225,71 +241,83 @@ Please provide a concise summary (2-3 paragraphs) that is informative yet reassu
     ) -> str | Generator:
         """
         Send a chat message and get a response
-        
-        Args:
-            messages: List of message dicts with 'role' and 'content'
-            analysis: Optional analysis context
-            user: Optional user context
-            stream: Whether to stream the response
-        
-        Returns:
-            Response string or generator for streaming
         """
         if not self.is_available:
             return self._get_fallback_response(messages)
         
+        # Build context
+        system_content = SYSTEM_PROMPT
+        if user:
+            system_content += get_user_context(user)
+        if analysis:
+            system_content += get_analysis_context(analysis)
+        
+        # Convert messages to Gemini Content format
+        # Skip system messages as we use system_instruction instead
+        history = []
+        for msg in messages[-20:]:
+            role = msg.get('role', 'user')
+            content = msg.get('content', '')
+            if role in ['user', 'model'] and content:
+                history.append(types.Content(
+                    role=role,
+                    parts=[types.Part(text=content)]
+                ))
+        
+        if stream:
+            return self._stream_response(history, system_content)
+        
         try:
-            # Build context
-            system_content = SYSTEM_PROMPT
-            if user:
-                system_content += get_user_context(user)
-            if analysis:
-                system_content += get_analysis_context(analysis)
-            
-            # Prepare messages for API
-            api_messages = [{"role": "system", "content": system_content}]
-            
-            # Add conversation history (limit to last 20 messages)
-            for msg in messages[-20:]:
-                api_messages.append({
-                    "role": msg.get('role', 'user'),
-                    "content": msg.get('content', '')
-                })
-            
-            if stream:
-                return self._stream_response(api_messages)
-            else:
-                response = self.client.chat.completions.create(
-                    model=self.model,
-                    messages=api_messages,
-                    max_tokens=1000,
+            # Use the chat session for multi-turn conversation
+            chat = self.client.chats.create(
+                model=self.model_name,
+                config=types.GenerateContentConfig(
+                    system_instruction=system_content,
+                    max_output_tokens=1000,
                     temperature=0.7
-                )
-                return response.choices[0].message.content
-                
-        except Exception as e:
-            print(f"Error in chat: {e}")
-            return self._get_fallback_response(messages)
-    
-    def _stream_response(self, messages: List[Dict]) -> Generator:
-        """Stream the response token by token"""
-        try:
-            stream = self.client.chat.completions.create(
-                model=self.model,
-                messages=messages,
-                max_tokens=1000,
-                temperature=0.7,
-                stream=True
+                ),
+                history=history[:-1] if len(history) > 1 else []
             )
             
-            for chunk in stream:
-                if chunk.choices[0].delta.content:
-                    yield chunk.choices[0].delta.content
-                    
+            # Send the last message
+            last_message = history[-1].parts[0].text if history else "Hello"
+            response = chat.send_message(last_message)
+            
+            if response.candidates and response.candidates[0].content and response.candidates[0].content.parts:
+                return response.candidates[0].content.parts[0].text
+            else:
+                return self._get_fallback_response(messages)
         except Exception as e:
-            print(f"Error in stream: {e}")
-            yield "I apologize, but I'm having trouble generating a response right now. Please try again."
+            print(f"Error in Gemini chat: {e}")
+            return self._get_fallback_response(messages)
     
+    def _stream_response(self, history: List, system_content: str) -> Generator:
+        """Stream the response token by token"""
+        try:
+            # Use the chat session for streaming
+            chat = self.client.chats.create(
+                model=self.model_name,
+                config=types.GenerateContentConfig(
+                    system_instruction=system_content,
+                    max_output_tokens=1000,
+                    temperature=0.7
+                ),
+                history=history[:-1] if len(history) > 1 else []
+            )
+            
+            # Send the last message with streaming
+            last_message = history[-1].parts[0].text if history else "Hello"
+            stream = chat.send_message_stream(last_message)
+            
+            for chunk in stream:
+                if chunk.candidates and chunk.candidates[0].content and chunk.candidates[0].content.parts:
+                    text = chunk.candidates[0].content.parts[0].text
+                    if text:
+                        yield text
+        except Exception as e:
+            print(f"Gemini Streaming error: {e}")
+            yield "I apologize, but I'm having trouble generating a response right now."
+
     def _get_fallback_response(self, messages: List[Dict]) -> str:
         """Generate a fallback response when AI is not available"""
         last_message = messages[-1].get('content', '') if messages else ''
@@ -322,34 +350,34 @@ Please provide a concise summary (2-3 paragraphs) that is informative yet reassu
         if not self.is_available or not messages:
             return "New Conversation"
         
+        # Get the first user message
+        first_user_msg = next(
+            (msg.get('content', '') for msg in messages if msg.get('role') == 'user'),
+            None
+        )
+        
+        if not first_user_msg:
+            return "New Conversation"
+
+        title_prompt = f"Generate a brief, descriptive title (max 5 words) for a conversation that starts with: {first_user_msg[:500]}\n\nReturn only the title, no quotes or punctuation."
+
         try:
-            # Get the first user message
-            first_user_msg = next(
-                (msg.get('content', '') for msg in messages if msg.get('role') == 'user'),
-                None
+            response = self.client.models.generate_content(
+                model=self.model_name,
+                contents=title_prompt,
+                config=types.GenerateContentConfig(
+                    max_output_tokens=20,
+                    temperature=0.5
+                )
             )
             
-            if not first_user_msg:
+            if response.candidates and response.candidates[0].content and response.candidates[0].content.parts:
+                title = response.candidates[0].content.parts[0].text.strip()
+                return title[:50] if title else "New Conversation"
+            else:
                 return "New Conversation"
-            
-            response = self.client.chat.completions.create(
-                model=self.model,
-                messages=[
-                    {
-                        "role": "system", 
-                        "content": "Generate a brief, descriptive title (max 5 words) for this conversation. Return only the title, no quotes or punctuation."
-                    },
-                    {"role": "user", "content": first_user_msg[:500]}
-                ],
-                max_tokens=20,
-                temperature=0.5
-            )
-            
-            title = response.choices[0].message.content.strip()
-            return title[:50] if title else "New Conversation"
-            
         except Exception as e:
-            print(f"Error generating title: {e}")
+            print(f"Error in Gemini title generation: {e}")
             return "New Conversation"
 
 

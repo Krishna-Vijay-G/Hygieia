@@ -237,12 +237,11 @@ export default function ChatPage() {
       setInputMessage('');
     },
     onSuccess: async () => {
-      // Wait for the query to refetch and show the real messages
-      await queryClient.invalidateQueries({ queryKey: ['chat-session', activeSessionId] });
-      queryClient.invalidateQueries({ queryKey: ['chat-sessions'] });
+      // Refetch both the session details and the sessions list
+      // This ensures the title is updated both in the header and sidebar
+      await queryClient.refetchQueries({ queryKey: ['chat-session', activeSessionId] });
+      await queryClient.refetchQueries({ queryKey: ['chat-sessions'] });
       
-      // Give the query a moment to refetch
-      await new Promise(resolve => setTimeout(resolve, 300));
       setIsTyping(false);
       setOptimisticMessages([]);
     },
